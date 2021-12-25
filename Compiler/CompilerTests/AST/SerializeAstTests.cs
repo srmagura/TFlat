@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
@@ -21,8 +22,8 @@ public class SerializeAstTests : AstTest
         await AstSerializer.SerializeAsync(expectedAst, memoryStream);
 
         memoryStream.Position = 0;
-        var ast = await AstDeserializer.DeserializeAsync(memoryStream);
+        var actualAst = await AstDeserializer.DeserializeAsync(memoryStream);
 
-        AssertAstsEqual(expectedAst, ast);
+        AssertAstsEqual(expectedAst, actualAst);
     }
 }

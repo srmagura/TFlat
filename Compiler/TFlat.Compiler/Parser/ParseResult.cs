@@ -1,7 +1,7 @@
 namespace TFlat.Compiler.Parser;
 
 internal record ParseResult<T>
-    where T : class
+    //where T : ParseNode
 {
     public ParseResult(T node, int consumedTokens)
     {

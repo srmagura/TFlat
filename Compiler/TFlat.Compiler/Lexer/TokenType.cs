@@ -5,6 +5,7 @@ internal enum TokenType
     Identifier,
 
     // Literals
+    IntLiteral,
     StringLiteral,
 
     // Keywords

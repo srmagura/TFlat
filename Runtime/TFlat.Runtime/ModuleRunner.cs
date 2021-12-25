@@ -44,12 +44,12 @@ internal static class ModuleRunner
         Print(functionCall.Arguments);
     }
 
-    private static void Print(ExpressionAstNode[] arguments)
+    private static void Print(AstNode[] arguments)
     {
         if (arguments.Length != 1)
             throw new Exception("print expected exactly 1 argument.");
 
-        if (arguments[0].Value is not StringLiteralAstNode stringLiteral)
+        if (arguments[0] is not StringLiteralAstNode stringLiteral)
             throw new Exception("The argument to print must be a string.");
 
         _executionOptions.StandardOut.WriteLine(stringLiteral.Value);

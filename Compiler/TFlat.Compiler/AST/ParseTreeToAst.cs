@@ -32,18 +32,27 @@ internal static class ParseTreeToAst
 
     private static FunctionCallAstNode ConvertFunctionCall(FunctionCallParseNode parseNode)
     {
-        var arguments = parseNode.ArgumentList.Arguments
+        var arguments = parseNode.Arguments
             .Select(ConvertExpression)
             .ToArray();
 
         return new FunctionCallAstNode(parseNode.Function, arguments);
     }
 
-    private static ExpressionAstNode ConvertExpression(ExpressionParseNode parseNode)
+    private static AstNode ConvertExpression(ParseNode parseNode)
     {
-        var stringLiteral = ConvertStringLiteral(parseNode.Value);
+        if (parseNode is IntLiteralParseNode intLiteral)
+            return ConvertIntLiteral(intLiteral);
 
-        return new ExpressionAstNode(stringLiteral);
+        if (parseNode is StringLiteralParseNode stringLiteral)
+            return ConvertStringLiteral(stringLiteral);
+
+        throw new Exception($"Could not convert to expression: {parseNode.GetType().Name}.");
+    }
+
+    private static IntLiteralAstNode ConvertIntLiteral(IntLiteralParseNode parseNode)
+    {
+        return new IntLiteralAstNode(parseNode.Value);
     }
 
     private static StringLiteralAstNode ConvertStringLiteral(StringLiteralParseNode parseNode)

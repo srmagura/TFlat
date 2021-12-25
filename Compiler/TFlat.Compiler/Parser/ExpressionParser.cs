@@ -4,18 +4,39 @@ namespace TFlat.Compiler.Parser;
 
 internal static class ExpressionParser
 {
-    public static ParseResult<ExpressionParseNode>? ParseExpression(Token[] tokens, int position)
+    internal static ParseResult<ParseNode> Generic<T>(ParseResult<T> result)
+        where T : ParseNode
     {
-        var stringLiteralResult = ParseStringLiteral(tokens, position);
-        if (stringLiteralResult == null) return null;
+        return new ParseResult<ParseNode>(result.Node, result.ConsumedTokens);
+    }
 
-        return new ParseResult<ExpressionParseNode>(
-            new ExpressionParseNode(stringLiteralResult.Node),
-            stringLiteralResult.ConsumedTokens
+    public static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
+    {
+        var intLiteral = ParseIntLiteral(tokens, position);
+        if (intLiteral != null) 
+            return Generic(intLiteral);
+
+        var stringLiteral = ParseStringLiteral(tokens, position);
+        if (stringLiteral != null)
+            return Generic(stringLiteral);
+
+        return null;
+    }
+
+    private static ParseResult<IntLiteralParseNode>? ParseIntLiteral(Token[] tokens, int position)
+    {
+        if (tokens[position].Type != TokenType.IntLiteral)
+            return null;
+
+        var value = int.Parse(tokens[position].Value);
+
+        return new ParseResult<IntLiteralParseNode>(
+            new IntLiteralParseNode(value),
+            1
         );
     }
 
-    public static ParseResult<StringLiteralParseNode>? ParseStringLiteral(Token[] tokens, int position)
+    private static ParseResult<StringLiteralParseNode>? ParseStringLiteral(Token[] tokens, int position)
     {
         if (tokens[position].Type != TokenType.StringLiteral)
             return null;

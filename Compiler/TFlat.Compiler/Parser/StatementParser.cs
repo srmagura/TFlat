@@ -38,14 +38,14 @@ internal static class StatementParser
         );
     }
 
-    private static ParseResult<ArgumentListParseNode>? ParseArgumentList(Token[] tokens, int position)
+    private static ParseResult<ParseNode[]>? ParseArgumentList(Token[] tokens, int position)
     {
         // TODO support 0 or 2+ arguments
-        var arg0Result = ExpressionParser.ParseExpression(tokens, position);
+        var arg0Result = ExpressionParser.Parse(tokens, position);
         if(arg0Result == null) return null;
 
-        return new ParseResult<ArgumentListParseNode>(
-            new ArgumentListParseNode(new[] { arg0Result.Node }),
+        return new ParseResult<ParseNode[]>(
+            new[] { arg0Result.Node },
             arg0Result.ConsumedTokens
         );
     }

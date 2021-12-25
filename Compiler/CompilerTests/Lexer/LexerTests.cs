@@ -12,21 +12,21 @@ public class LexerTests
     }
 
     [TestMethod]
-    public void ItLexesIdentifier()
+    public void Identifier()
     {
         var token = TheLexer.Lex("print").Single();
         Assert.AreEqual(new Token(TokenType.Identifier, "print", 1, 1), token);
     }
 
     [TestMethod]
-    public void ItLexesIdentifierWithWhitespace()
+    public void IdentifierWithWhitespace()
     {
         var token = TheLexer.Lex("\n\t  print\r\n").Single();
         Assert.AreEqual(new Token(TokenType.Identifier, "print", 2, 4), token);
     }
 
     [TestMethod]
-    public void ItLexesMultipleIdentifiers()
+    public void MultipleIdentifiers()
     {
         var tokens = TheLexer.Lex("a b");
 
@@ -40,7 +40,17 @@ public class LexerTests
     }
 
     [TestMethod]
-    public void ItLexesStringLiterals()
+    public void IntLiterals()
+    {
+        var token = TheLexer.Lex("0").Single();
+        Assert.AreEqual(new Token(TokenType.IntLiteral, "0", 1, 1), token);
+
+        token = TheLexer.Lex("34").Single();
+        Assert.AreEqual(new Token(TokenType.IntLiteral, "34", 1, 1), token);
+    }
+
+    [TestMethod]
+    public void StringLiterals()
     {
         var token = TheLexer.Lex("\"\"").Single();
         Assert.AreEqual(new Token(TokenType.StringLiteral, "\"\"", 1, 1), token);
@@ -60,7 +70,7 @@ public class LexerTests
     }
 
     [TestMethod]
-    public void ItLexesSeparators()
+    public void Separators()
     {
         var token = TheLexer.Lex("(").Single();
         Assert.AreEqual(new Token(TokenType.OpenParen, "(", 1, 1), token);
@@ -79,7 +89,7 @@ public class LexerTests
     }
 
     [TestMethod]
-    public void ItLexesKeywords()
+    public void Keywords()
     {
         var token = TheLexer.Lex("export").Single();
         Assert.AreEqual(new Token(TokenType.ExportKeyword, "export", 1, 1), token);
@@ -97,7 +107,7 @@ public class LexerTests
     }
 
     [TestMethod]
-    public void ItLexesHelloWorld()
+    public void HelloWorld()
     {
         var simpleTokens = TheLexer.Lex(CodeFixtures.HelloWorld)
             .Select(ToSimpleToken)

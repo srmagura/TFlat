@@ -61,6 +61,7 @@ internal static class TheLexer
 
             if (TryLex(LexKeyword)) continue;
             if (TryLex(LexIdentifier)) continue;
+            if (TryLex(LexIntLiteral)) continue;
             if (TryLex(LexStringLiteral)) continue;
             if (TryLex(LexSeparator)) continue;
 
@@ -113,6 +114,22 @@ internal static class TheLexer
         if (sb.Length == 0) return null;
 
         return new SimpleToken(TokenType.Identifier, sb.ToString());
+    }
+
+    private static SimpleToken? LexIntLiteral(string s, int position)
+    {
+        var sb = new StringBuilder();
+
+        for (var i = position; i < s.Length; i++)
+        {
+            if (!char.IsDigit(s[i])) break;
+
+            sb.Append(s[i]);
+        }
+
+        if (sb.Length == 0) return null;
+
+        return new SimpleToken(TokenType.IntLiteral, sb.ToString());
     }
 
     private static SimpleToken? LexStringLiteral(string s, int position)

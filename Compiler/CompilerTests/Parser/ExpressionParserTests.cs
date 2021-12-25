@@ -7,19 +7,26 @@ namespace UnitTests.Parser;
 public class ExpressionParserTests
 {
     [TestMethod]
+    public void ItParsesIntLiteral()
+    {
+        var code = "2";
+        var tokens = TheLexer.Lex(code);
+
+        var result = ExpressionParser.Parse(tokens, 0);
+        Assert.IsNotNull(result);
+        Assert.AreEqual(2, ((IntLiteralParseNode)result.Node).Value);
+        Assert.AreEqual(1, result.ConsumedTokens);
+    }
+
+    [TestMethod]
     public void ItParsesStringLiteral()
     {
         var code = "\"foo\"";
         var tokens = TheLexer.Lex(code);
 
-        var stringLiteralResult = ExpressionParser.ParseStringLiteral(tokens, 0);
-        Assert.IsNotNull(stringLiteralResult);
-        Assert.AreEqual("foo", stringLiteralResult.Node.Value);
-        Assert.AreEqual(1, stringLiteralResult.ConsumedTokens);
-
-        var result = ExpressionParser.ParseExpression(tokens, 0);
+        var result = ExpressionParser.Parse(tokens, 0);
         Assert.IsNotNull(result);
-        Assert.AreEqual(stringLiteralResult.Node, result.Node.Value);
+        Assert.AreEqual("foo", ((StringLiteralParseNode)result.Node).Value);
         Assert.AreEqual(1, result.ConsumedTokens);
     }
 }

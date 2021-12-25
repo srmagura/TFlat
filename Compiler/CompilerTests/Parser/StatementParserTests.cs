@@ -11,22 +11,19 @@ public class StatementParserTests : ParserTest
     {
         var code = @"print(""hello world"");";
         var tokens = TheLexer.Lex(code);
-
+        
         var result = StatementParser.Parse(tokens, 0);
 
         var expectedParseTree = new StatementParseNode(
             new FunctionCallParseNode(
                 "print",
-                new ArgumentListParseNode(
-                    new[]
-                    {
-                        new ExpressionParseNode(
-                            new StringLiteralParseNode("hello world")
-                        )
-                    }
-                )
+                new[]
+                {
+                    new StringLiteralParseNode("hello world")
+                }
             )
         );
+
         AssertParseTreesEqual(expectedParseTree, result?.Node);
         Assert.AreEqual(tokens.Length, result?.ConsumedTokens);
     }

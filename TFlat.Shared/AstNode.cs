@@ -2,23 +2,24 @@ namespace TFlat.Shared;
 
 public enum AstNodeType
 {
+    IntLiteral,
     StringLiteral,
-    Expression,
+
     FunctionCall,
     Statement,
     FunctionDeclaration,
     Module
 }
 
-public record AstNode(AstNodeType Type);
+public abstract record AstNode(AstNodeType Type);
+
+public record IntLiteralAstNode(int Value)
+    : AstNode(AstNodeType.IntLiteral);
 
 public record StringLiteralAstNode(string Value)
     : AstNode(AstNodeType.StringLiteral);
 
-public record ExpressionAstNode(StringLiteralAstNode Value)
-    : AstNode(AstNodeType.Expression);
-
-public record FunctionCallAstNode(string Function, ExpressionAstNode[] Arguments)
+public record FunctionCallAstNode(string Function, AstNode[] Arguments)
     : AstNode(AstNodeType.FunctionCall);
 
 public record StatementAstNode(FunctionCallAstNode FunctionCall)
@@ -29,3 +30,17 @@ public record FunctionDeclarationAstNode(string Name, bool Exported, StatementAs
 
 public record ModuleAstNode(FunctionDeclarationAstNode[] Functions)
     : AstNode(AstNodeType.Module);
+
+public static class AstNodeTypeMap
+{
+    public static readonly Dictionary<AstNodeType, Type> Map = new()
+    {
+        [AstNodeType.IntLiteral] = typeof(IntLiteralAstNode),
+        [AstNodeType.StringLiteral] = typeof(StringLiteralAstNode),
+
+        [AstNodeType.FunctionCall] = typeof(FunctionCallAstNode),
+        [AstNodeType.Statement] = typeof(StatementAstNode),
+        [AstNodeType.FunctionDeclaration] = typeof(FunctionDeclarationAstNode),
+        [AstNodeType.Module] = typeof(ModuleAstNode)
+    };
+}
