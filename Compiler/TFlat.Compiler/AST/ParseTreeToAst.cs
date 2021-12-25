@@ -1,4 +1,5 @@
 using TFlat.Compiler.Parser;
+using TFlat.Shared;
 
 namespace TFlat.Compiler.AST;
 

@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{D4A88365-F076-449B-8AA5-845BF3B047E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlat.Compiler", "Compiler\TFlat.Compiler\TFlat.Compiler.csproj", "{7ACA384F-92A4-4822-A4D0-E732A1D20E6A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFlat.Compiler", "Compiler\TFlat.Compiler\TFlat.Compiler.csproj", "{7ACA384F-92A4-4822-A4D0-E732A1D20E6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "Compiler\UnitTests\UnitTests.csproj", "{6B2413B6-7E9B-41BE-956A-52BFBB3950AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "Compiler\UnitTests\UnitTests.csproj", "{6B2413B6-7E9B-41BE-956A-52BFBB3950AE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{E06749AA-59B9-47EA-87A5-C1AFF0507765}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlat.Disassembler", "Compiler\TFlat.Disassembler\TFlat.Disassembler.csproj", "{5B34C263-AD18-4B1F-89D0-EFD918DA5311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TFlat.Disassembler", "Compiler\TFlat.Disassembler\TFlat.Disassembler.csproj", "{5B34C263-AD18-4B1F-89D0-EFD918DA5311}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlat.Shared", "TFlat.Shared\TFlat.Shared.csproj", "{7D5BCE9B-60EF-47DD-8345-461E69FECBA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D5BCE9B-60EF-47DD-8345-461E69FECBA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D5BCE9B-60EF-47DD-8345-461E69FECBA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D5BCE9B-60EF-47DD-8345-461E69FECBA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D5BCE9B-60EF-47DD-8345-461E69FECBA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

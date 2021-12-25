@@ -1,6 +1,7 @@
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
+using TFlat.Shared;
 
 namespace UnitTests.AST;
 
