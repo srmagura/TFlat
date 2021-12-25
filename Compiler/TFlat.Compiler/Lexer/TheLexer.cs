@@ -5,7 +5,7 @@ namespace TFlat.Compiler.Lexer;
 
 internal static class TheLexer
 {
-    public static IReadOnlyList<Token> Lex(string s)
+    public static List<Token> Lex(string s)
     {
         s = Preprocess(s);
 
@@ -41,7 +41,7 @@ internal static class TheLexer
         // Returns true if func returned a token
         bool TryLex(Func<string, int, SimpleToken?> func)
         {
-            var simpleToken = LexIdentifier(s, position);
+            var simpleToken = func(s, position);
             if (simpleToken == null) return false;
 
             tokens.Add(
@@ -61,6 +61,7 @@ internal static class TheLexer
             if (ConsumeWhitespace()) continue;
 
             if (TryLex(LexIdentifier)) continue;
+            if (TryLex(LexStringLiteral)) continue;
 
             throw new Exception("Failed to identify the next token.");
         }
@@ -90,5 +91,33 @@ internal static class TheLexer
         if (sb.Length == 0) return null;
 
         return new SimpleToken(TokenType.Identifier, sb.ToString());
+    }
+
+    //
+    // LITERALS
+    //
+
+    private static SimpleToken? LexStringLiteral(string s, int position)
+    {
+        if (s[position] != '"') return null;
+
+        var sb = new StringBuilder();
+
+        for (var i = position + 1; i < s.Length; i++)
+        {
+            if (s[i] == '"')
+            {
+                return new SimpleToken(
+                    TokenType.StringLiteral, 
+                    s.Substring(position, i - position + 1)
+                );
+            }
+
+            if (s[i] == '\n') return null;
+
+            sb.Append(s[i]);
+        }
+
+        return null;
     }
 }
