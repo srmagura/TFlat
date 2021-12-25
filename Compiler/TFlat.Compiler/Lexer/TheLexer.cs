@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace TFlat.Compiler.Lexer;
 
@@ -60,6 +59,7 @@ internal static class TheLexer
         {
             if (ConsumeWhitespace()) continue;
 
+            if (TryLex(LexKeyword)) continue;
             if (TryLex(LexIdentifier)) continue;
             if (TryLex(LexStringLiteral)) continue;
             if (TryLex(LexSeparator)) continue;
@@ -73,6 +73,27 @@ internal static class TheLexer
     private static string Preprocess(string s)
     {
         return s.Replace("\r\n", "\n");
+    }
+
+    private static SimpleToken? LexKeyword(string s, int position)
+    {
+        var sb = new StringBuilder();
+
+        for (var i = position; i < s.Length; i++)
+        {
+            if (!char.IsLower(s[i])) break;
+            sb.Append(s[i]);
+        }
+
+        var keyword = sb.ToString();
+
+        return keyword switch
+        {
+            "export" => new SimpleToken(TokenType.ExportKeyword, keyword),
+            "fun" => new SimpleToken(TokenType.FunKeyword, keyword),
+            "void" => new SimpleToken(TokenType.VoidKeyword, keyword),
+            _ => null
+        };
     }
 
     private static SimpleToken? LexIdentifier(string s, int position)
@@ -93,10 +114,6 @@ internal static class TheLexer
 
         return new SimpleToken(TokenType.Identifier, sb.ToString());
     }
-
-    //
-    // LITERALS
-    //
 
     private static SimpleToken? LexStringLiteral(string s, int position)
     {
@@ -126,6 +143,7 @@ internal static class TheLexer
     {
         return s[position] switch
         {
+            ';' => new SimpleToken(TokenType.Semicolon, s[position].ToString()),
             ':' => new SimpleToken(TokenType.Colon, s[position].ToString()),
             '(' => new SimpleToken(TokenType.OpenParen, s[position].ToString()),
             ')' => new SimpleToken(TokenType.CloseParen, s[position].ToString()),

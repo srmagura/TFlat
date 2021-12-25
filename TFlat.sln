@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solutio
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFlat.Disassembler", "Compiler\TFlat.Disassembler\TFlat.Disassembler.csproj", "{5B34C263-AD18-4B1F-89D0-EFD918DA5311}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{6B2413B6-7E9B-41BE-956A-52BFBB3950AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B2413B6-7E9B-41BE-956A-52BFBB3950AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B2413B6-7E9B-41BE-956A-52BFBB3950AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B34C263-AD18-4B1F-89D0-EFD918DA5311}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{7ACA384F-92A4-4822-A4D0-E732A1D20E6A} = {D4A88365-F076-449B-8AA5-845BF3B047E6}
 		{6B2413B6-7E9B-41BE-956A-52BFBB3950AE} = {D4A88365-F076-449B-8AA5-845BF3B047E6}
+		{5B34C263-AD18-4B1F-89D0-EFD918DA5311} = {D4A88365-F076-449B-8AA5-845BF3B047E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2359CD23-1B85-49CD-9842-9968798B94F7}

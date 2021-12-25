@@ -81,4 +81,54 @@ public class LexerTests
         token = TheLexer.Lex(":").Single();
         Assert.AreEqual(new Token(TokenType.Colon, ":", 1, 1), token);
     }
+
+    [TestMethod]
+    public void ItLexesKeywords()
+    {
+        var token = TheLexer.Lex("export").Single();
+        Assert.AreEqual(new Token(TokenType.ExportKeyword, "export", 1, 1), token);
+
+        token = TheLexer.Lex("fun").Single();
+        Assert.AreEqual(new Token(TokenType.FunKeyword, "fun", 1, 1), token);
+
+        token = TheLexer.Lex("void").Single();
+        Assert.AreEqual(new Token(TokenType.VoidKeyword, "void", 1, 1), token);
+    }
+
+    private static SimpleToken ToSimpleToken(Token token)
+    {
+        return new SimpleToken(token.Type, token.Value);
+    }
+
+    [TestMethod]
+    public void ItLexesHelloWorld()
+    {
+        var code = @"
+export fun main(): void {
+    print(""hello world"");
+}
+        ";
+
+        var simpleTokens = TheLexer.Lex(code).Select(ToSimpleToken).ToList();
+
+        var expected = new List<SimpleToken>
+        {
+            new SimpleToken(TokenType.ExportKeyword, "export"),
+            new SimpleToken(TokenType.FunKeyword, "fun"),
+            new SimpleToken(TokenType.Identifier, "main"),
+            new SimpleToken(TokenType.OpenParen, "("),
+            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.Colon, ":"),
+            new SimpleToken(TokenType.VoidKeyword, "void"),
+            new SimpleToken(TokenType.OpenCurlyBrace, "{"),
+            new SimpleToken(TokenType.Identifier, "print"),
+            new SimpleToken(TokenType.OpenParen, "("),
+            new SimpleToken(TokenType.StringLiteral, "\"hello world\""),
+            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.Semicolon, ";"),
+            new SimpleToken(TokenType.CloseCurlyBrace, "}"),
+        };
+
+        CollectionAssert.AreEqual(expected, simpleTokens);
+    }
 }

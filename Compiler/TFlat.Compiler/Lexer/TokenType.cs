@@ -13,6 +13,7 @@ internal enum TokenType
     VoidKeyword,
 
     // Separators
+    Semicolon,
     Colon,
     OpenParen,
     CloseParen,
