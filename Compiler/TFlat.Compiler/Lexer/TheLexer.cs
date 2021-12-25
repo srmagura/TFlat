@@ -105,7 +105,7 @@ internal static class TheLexer
         {
             var isLetterOrUnderscore = char.IsLetter(s[i]) || s[i] == '_';
 
-            if (i == 0 && !isLetterOrUnderscore) return null;
+            if (i == position && !isLetterOrUnderscore) return null;
             if (!isLetterOrUnderscore && !char.IsDigit(s[i])) break;
 
             sb.Append(s[i]);

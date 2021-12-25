@@ -107,6 +107,25 @@ public class LexerTests
     }
 
     [TestMethod]
+    public void PrintIntLiteral()
+    {
+        var simpleTokens = TheLexer.Lex("print(3);")
+            .Select(ToSimpleToken)
+            .ToList();
+
+        var expected = new List<SimpleToken>
+        {
+            new SimpleToken(TokenType.Identifier, "print"),
+            new SimpleToken(TokenType.OpenParen, "("),
+            new SimpleToken(TokenType.IntLiteral, "3"),
+            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.Semicolon, ";"),
+        };
+
+        CollectionAssert.AreEqual(expected, simpleTokens);
+    }
+
+    [TestMethod]
     public void HelloWorld()
     {
         var simpleTokens = TheLexer.Lex(CodeFixtures.HelloWorld)

@@ -17,12 +17,9 @@ public static class CompilerProgram
     public static async Task CompileModuleAsync(string code, Stream dllStream)
     {
         var tokens = TheLexer.Lex(code);
-        var parseResult = ModuleParser.Parse(tokens);
-
-        if (parseResult == null)
-            throw new Exception("Failed to parse module.");
-
-        var ast = ParseTreeToAst.ConvertModule(parseResult.Node);
+        var parseTree = ModuleParser.Parse(tokens);
+        var ast = ParseTreeToAst.ConvertModule(parseTree);
+        
         await AstSerializer.SerializeAsync(ast, dllStream);
     }
 

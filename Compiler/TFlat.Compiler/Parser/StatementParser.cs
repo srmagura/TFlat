@@ -26,6 +26,15 @@ internal static class StatementParser
         if (tokens[position + 1].Type != TokenType.OpenParen)
             return null;
 
+        if (tokens[position + 2].Type == TokenType.CloseParen)
+        {
+            // Function call with no arguments
+            return new ParseResult<FunctionCallParseNode>(
+                new FunctionCallParseNode(tokens[position].Value, Array.Empty<ParseNode>()),
+                3
+            );
+        }
+
         var argumentListResult = ParseArgumentList(tokens, position + 2);
         if (argumentListResult == null) return null;
 

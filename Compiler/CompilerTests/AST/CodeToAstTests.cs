@@ -11,11 +11,8 @@ public class CodeToAstTests : AstTest
     private static ModuleAstNode Compile(string code)
     {
         var tokens = TheLexer.Lex(code);
-        var result = ModuleParser.Parse(tokens);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(result.ConsumedTokens, tokens.Length);
-
-        return ParseTreeToAst.ConvertModule(result.Node);
+        var parseTree = ModuleParser.Parse(tokens);
+        return ParseTreeToAst.ConvertModule(parseTree);
     }
 
     [TestMethod]
@@ -73,7 +70,7 @@ public class CodeToAstTests : AstTest
         );
 
         var main = new FunctionDeclarationAstNode(
-            "print3",
+            "main",
             Exported: false,
             Statements: new[]
             {

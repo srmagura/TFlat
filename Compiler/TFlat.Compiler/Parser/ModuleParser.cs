@@ -4,18 +4,25 @@ namespace TFlat.Compiler.Parser;
 
 internal class ModuleParser
 {
-    internal static ParseResult<ModuleParseNode>? Parse(Token[] tokens)
+    internal static ModuleParseNode Parse(Token[] tokens)
     {
         var i = 0;
+        var functionDeclarations = new List<FunctionDeclarationParseNode>();
 
-        // TODO support more than one function declaration
-        var functionDeclarationResult = ParseFunctionDeclaration(tokens, i);
-        if (functionDeclarationResult == null) return null;
+        while (i < tokens.Length)
+        {
+            var functionDeclarationResult = ParseFunctionDeclaration(tokens, i);
+            if (functionDeclarationResult != null)
+            {
+                functionDeclarations.Add(functionDeclarationResult.Node);
+                i += functionDeclarationResult.ConsumedTokens;
+                continue;
+            }
 
-        return new ParseResult<ModuleParseNode>(
-            new ModuleParseNode(new[] { functionDeclarationResult.Node }),
-            functionDeclarationResult.ConsumedTokens
-        );
+            throw new Exception("Parsing failure.");
+        }
+
+        return new ModuleParseNode(functionDeclarations.ToArray());
     }
 
     private static ParseResult<FunctionDeclarationParseNode>? ParseFunctionDeclaration(Token[] tokens, int position)
@@ -47,19 +54,27 @@ internal class ModuleParser
         if (tokens[i].Type != TokenType.OpenCurlyBrace) return null;
         i++;
 
-        // TODO support multiple statements
-        var statementParseResult = StatementParser.Parse(tokens, i);
-        if (statementParseResult == null) return null;
+        var statements = new List<StatementParseNode>();
 
-        i += statementParseResult.ConsumedTokens;
-        if (tokens[i].Type != TokenType.CloseCurlyBrace) return null;
-        i++;
+        while(i < tokens.Length)
+        {
+            if (tokens[i].Type == TokenType.CloseCurlyBrace)
+            {
+                i++;
 
-        var statements = new [] { statementParseResult.Node };
+                return new ParseResult<FunctionDeclarationParseNode>(
+                    new FunctionDeclarationParseNode(name, exported, statements.ToArray()),
+                    consumedTokens: i - position
+                );
+            }
 
-        return new ParseResult<FunctionDeclarationParseNode>(
-            new FunctionDeclarationParseNode(name, exported, statements),
-            consumedTokens: i - position
-        );
+            var statementParseResult = StatementParser.Parse(tokens, i);
+            if (statementParseResult == null) return null;
+
+            statements.Add(statementParseResult.Node);
+            i += statementParseResult.ConsumedTokens;
+        }
+
+        return null;
     }
 }

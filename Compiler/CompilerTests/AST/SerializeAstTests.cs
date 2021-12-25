@@ -13,10 +13,8 @@ public class SerializeAstTests : AstTest
     public async Task ItSerializesAndDeserializes()
     {
         var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
-        var parseResult = ModuleParser.Parse(tokens);
-        Assert.IsNotNull(parseResult);
-
-        var expectedAst = ParseTreeToAst.ConvertModule(parseResult.Node);
+        var parseTree = ModuleParser.Parse(tokens);
+        var expectedAst = ParseTreeToAst.ConvertModule(parseTree);
 
         using var memoryStream = new MemoryStream();
         await AstSerializer.SerializeAsync(expectedAst, memoryStream);

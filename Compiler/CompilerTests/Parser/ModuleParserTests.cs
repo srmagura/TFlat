@@ -9,12 +9,7 @@ public class ModuleParserTests : ParserTest
     private static ModuleParseNode Parse(string code)
     {
         var tokens = TheLexer.Lex(code);
-
-        var result = ModuleParser.Parse(tokens);
-        Assert.IsNotNull(result);
-        Assert.AreEqual(result.ConsumedTokens, tokens.Length);
-
-        return result.Node;
+        return ModuleParser.Parse(tokens);
     }
 
     [TestMethod]
