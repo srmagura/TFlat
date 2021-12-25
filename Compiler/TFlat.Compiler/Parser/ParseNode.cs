@@ -1,15 +1,35 @@
 namespace TFlat.Compiler.Parser;
 
-internal record StringLiteralParseNode(string Value);
+internal enum ParseNodeType
+{
+    StringLiteral,
+    Expression,
+    ArgumentList,
+    FunctionCall,
+    Statement,
+    FunctionDeclaration,
+    Module
+}
 
-internal record ExpressionParseNode(StringLiteralParseNode Value);
+internal record ParseNode(ParseNodeType Type);
 
-internal record ArgumentListParseNode(ExpressionParseNode[] Arguments);
+internal record StringLiteralParseNode(string Value) 
+    : ParseNode(ParseNodeType.StringLiteral);
 
-internal record FunctionCallParseNode(string Function, ArgumentListParseNode ArgumentList);
+internal record ExpressionParseNode(StringLiteralParseNode Value) 
+    : ParseNode(ParseNodeType.Expression);
 
-internal record StatementParseNode(FunctionCallParseNode FunctionCall);
+internal record ArgumentListParseNode(ExpressionParseNode[] Arguments) 
+    : ParseNode(ParseNodeType.ArgumentList);
 
-internal record FunctionDeclarationParseNode(string Name, bool Exported, StatementParseNode[] Statements);
+internal record FunctionCallParseNode(string Function, ArgumentListParseNode ArgumentList)
+    : ParseNode(ParseNodeType.FunctionCall);
 
-internal record ModuleParseNode(FunctionDeclarationParseNode[] Functions);
+internal record StatementParseNode(FunctionCallParseNode FunctionCall)
+    : ParseNode(ParseNodeType.Statement);
+
+internal record FunctionDeclarationParseNode(string Name, bool Exported, StatementParseNode[] Statements)
+    : ParseNode(ParseNodeType.FunctionDeclaration);
+
+internal record ModuleParseNode(FunctionDeclarationParseNode[] FunctionDeclarations)
+    : ParseNode(ParseNodeType.Module);

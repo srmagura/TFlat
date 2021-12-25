@@ -4,10 +4,12 @@ namespace TFlat.Compiler.Parser;
 
 internal class ModuleParser
 {
-    internal static ParseResult<ModuleParseNode>? Parse(Token[] tokens, int position)
+    internal static ParseResult<ModuleParseNode>? Parse(Token[] tokens)
     {
+        var i = 0;
+
         // TODO support more than one function declaration
-        var functionDeclarationResult = ParseFunctionDeclaration(tokens, position);
+        var functionDeclarationResult = ParseFunctionDeclaration(tokens, i);
         if (functionDeclarationResult == null) return null;
 
         return new ParseResult<ModuleParseNode>(

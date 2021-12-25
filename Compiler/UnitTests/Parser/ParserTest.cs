@@ -8,12 +8,7 @@ public abstract class ParserTest
 
     protected static string SerializeParseTree(object? node)
     {
-        if (node == null) return "null";
-
-        return JsonSerializer.Serialize(
-            new { Type = node.GetType().Name, Node = node },
-            JsonSerializerOptions
-        );
+        return JsonSerializer.Serialize(node, JsonSerializerOptions);
     }
 
     protected static void AssertParseTreesEqual(object? expected, object? actual)

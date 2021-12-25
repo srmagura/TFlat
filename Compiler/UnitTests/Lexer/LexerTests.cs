@@ -103,13 +103,9 @@ public class LexerTests
     [TestMethod]
     public void ItLexesHelloWorld()
     {
-        var code = @"
-export fun main(): void {
-    print(""hello world"");
-}
-        ";
-
-        var simpleTokens = TheLexer.Lex(code).Select(ToSimpleToken).ToList();
+        var simpleTokens = TheLexer.Lex(CodeFixtures.HelloWorld)
+            .Select(ToSimpleToken)
+            .ToList();
 
         var expected = new List<SimpleToken>
         {

@@ -10,14 +10,9 @@ public class ModuleParserTests : ParserTest
     [TestMethod]
     public void ItParsesHelloWorld()
     {
-        var code = @"
-export fun main(): void {
-    print(""hello world"");
-}
-        ";
-        var tokens = TheLexer.Lex(code);
+        var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
         
-        var result = ModuleParser.Parse(tokens, 0);
+        var result = ModuleParser.Parse(tokens);
 
         var statementParseTree = new StatementParseNode(
             new FunctionCallParseNode(
@@ -48,6 +43,5 @@ export fun main(): void {
         );
 
         AssertParseTreesEqual(moduleParseTree, result?.Node);
-        Console.WriteLine(SerializeParseTree(result.Node));
     }
 }
