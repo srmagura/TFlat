@@ -12,7 +12,7 @@ public class LexerTests
     [TestMethod]
     public void ItConsumesWhitespace()
     {
-        Assert.AreEqual(0, TheLexer.Lex("\n \t   \r\n").Count);
+        Assert.AreEqual(0, TheLexer.Lex("\n \t   \r\n").Length);
     }
 
     [TestMethod]
@@ -59,8 +59,8 @@ public class LexerTests
     [TestMethod]
     public void ItThrowsOnUnterminatedStringLiterals()
     {
-        Assert.ThrowsException<Exception>(() => TheLexer.Lex("\"").Count);
-        Assert.ThrowsException<Exception>(() => TheLexer.Lex("\"\n\"").Count);
+        Assert.ThrowsException<Exception>(() => TheLexer.Lex("\""));
+        Assert.ThrowsException<Exception>(() => TheLexer.Lex("\"\n\""));
     }
 
     [TestMethod]

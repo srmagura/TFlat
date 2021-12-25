@@ -4,7 +4,7 @@ namespace TFlat.Compiler.Lexer;
 
 internal static class TheLexer
 {
-    public static List<Token> Lex(string s)
+    public static Token[] Lex(string s)
     {
         s = Preprocess(s);
 
@@ -67,7 +67,7 @@ internal static class TheLexer
             throw new Exception("Failed to identify the next token.");
         }
 
-        return tokens;
+        return tokens.ToArray();
     }
 
     private static string Preprocess(string s)
