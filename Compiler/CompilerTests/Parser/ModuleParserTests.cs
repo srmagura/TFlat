@@ -9,9 +9,7 @@ public class ModuleParserTests : ParserTest
     [TestMethod]
     public void ItParsesHelloWorld()
     {
-        var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
-        
-        var result = ModuleParser.Parse(tokens);
+        var actual = Parse(CodeFixtures.HelloWorld);
 
         var statementParseTree = new StatementParseNode(
             new FunctionCallParseNode(
@@ -27,8 +25,8 @@ public class ModuleParserTests : ParserTest
             )
         );
 
-        var moduleParseTree = new ModuleParseNode(
-            new []
+        var expected = new ModuleParseNode(
+            new[]
             {
                 new FunctionDeclarationParseNode(
                     "main",
@@ -41,6 +39,6 @@ public class ModuleParserTests : ParserTest
             }
         );
 
-        AssertParseTreesEqual(moduleParseTree, result?.Node);
+        AssertParseTreesEqual(expected, actual);
     }
 }
