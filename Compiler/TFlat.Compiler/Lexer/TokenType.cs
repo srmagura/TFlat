@@ -16,5 +16,7 @@ internal enum TokenType
     Colon,
     OpenParen,
     CloseParen,
+    OpenCurlyBrace,
+    CloseCurlyBrace,
 }
 

@@ -62,4 +62,23 @@ public class LexerTests
         Assert.ThrowsException<Exception>(() => TheLexer.Lex("\"").Count);
         Assert.ThrowsException<Exception>(() => TheLexer.Lex("\"\n\"").Count);
     }
+
+    [TestMethod]
+    public void ItLexesSeparators()
+    {
+        var token = TheLexer.Lex("(").Single();
+        Assert.AreEqual(new Token(TokenType.OpenParen, "(", 1, 1), token);
+
+        token = TheLexer.Lex(")").Single();
+        Assert.AreEqual(new Token(TokenType.CloseParen, ")", 1, 1), token);
+
+        token = TheLexer.Lex("{").Single();
+        Assert.AreEqual(new Token(TokenType.OpenCurlyBrace, "{", 1, 1), token);
+
+        token = TheLexer.Lex("}").Single();
+        Assert.AreEqual(new Token(TokenType.CloseCurlyBrace, "}", 1, 1), token);
+
+        token = TheLexer.Lex(":").Single();
+        Assert.AreEqual(new Token(TokenType.Colon, ":", 1, 1), token);
+    }
 }

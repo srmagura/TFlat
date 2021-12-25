@@ -62,6 +62,7 @@ internal static class TheLexer
 
             if (TryLex(LexIdentifier)) continue;
             if (TryLex(LexStringLiteral)) continue;
+            if (TryLex(LexSeparator)) continue;
 
             throw new Exception("Failed to identify the next token.");
         }
@@ -119,5 +120,18 @@ internal static class TheLexer
         }
 
         return null;
+    }
+
+    private static SimpleToken? LexSeparator(string s, int position)
+    {
+        return s[position] switch
+        {
+            ':' => new SimpleToken(TokenType.Colon, s[position].ToString()),
+            '(' => new SimpleToken(TokenType.OpenParen, s[position].ToString()),
+            ')' => new SimpleToken(TokenType.CloseParen, s[position].ToString()),
+            '{' => new SimpleToken(TokenType.OpenCurlyBrace, s[position].ToString()),
+            '}' => new SimpleToken(TokenType.CloseCurlyBrace, s[position].ToString()),
+            _ => null
+        };
     }
 }
