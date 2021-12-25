@@ -5,25 +5,8 @@ using TFlat.Compiler.Parser;
 namespace UnitTests.Parser;
 
 [TestClass]
-public class StatementParserTests
+public class StatementParserTests : ParserTest
 {
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { WriteIndented = true };
-
-    private static string SerializeParseTree(object? node)
-    {
-        if (node == null) return "null";
-
-        return JsonSerializer.Serialize(
-            new { Type = node.GetType().Name, Node = node },
-            JsonSerializerOptions
-        );
-    }
-
-    private static void AssertParseTreesEqual(object? expected, object? actual)
-    {
-        Assert.AreEqual(SerializeParseTree(expected), SerializeParseTree(actual));
-    }
-
     [TestMethod]
     public void ItParsesPrint()
     {
@@ -46,5 +29,6 @@ public class StatementParserTests
             )
         );
         AssertParseTreesEqual(expectedParseTree, result?.Node);
+        Assert.AreEqual(tokens.Length, result?.ConsumedTokens);
     }
 }

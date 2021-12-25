@@ -9,3 +9,7 @@ internal record ArgumentListParseNode(ExpressionParseNode[] Arguments);
 internal record FunctionCallParseNode(string Function, ArgumentListParseNode ArgumentList);
 
 internal record StatementParseNode(FunctionCallParseNode FunctionCall);
+
+internal record FunctionDeclarationParseNode(string Name, bool Exported, StatementParseNode[] Statements);
+
+internal record ModuleParseNode(FunctionDeclarationParseNode[] Functions);

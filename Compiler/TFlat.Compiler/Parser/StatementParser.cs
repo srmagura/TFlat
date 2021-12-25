@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using TFlat.Compiler.Lexer;
 
 namespace TFlat.Compiler.Parser;
@@ -11,9 +9,12 @@ internal static class StatementParser
         var result = ParseFunctionCall(tokens, position);
         if (result == null) return null;
 
+        var i = position + result.ConsumedTokens;
+        if(tokens[i].Type != TokenType.Semicolon) return null;
+
         return new ParseResult<StatementParseNode>(
             new StatementParseNode(result.Node),
-            result.ConsumedTokens
+            result.ConsumedTokens + 1
         );
     }
 
