@@ -1,9 +1,9 @@
-namespace UnitTests;
+namespace TestUtil;
 
-internal class CodeFixtures
+public static class CodeFixtures
 {
     public const string HelloWorld = @"
-export fun main(): void {
+fun main(): void {
     print(""hello world"");
 }
         ";

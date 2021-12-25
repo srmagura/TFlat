@@ -29,12 +29,12 @@ public class ParseTreeToAstTests : AstTest
             )
         );
 
-        var moduleAst = new ModuleAstNode(
+        var expectedAst = new ModuleAstNode(
             new[]
             {
                 new FunctionDeclarationAstNode(
                     "main",
-                    Exported: true,
+                    Exported: false,
                     new []
                     {
                         statementAst
@@ -42,7 +42,6 @@ public class ParseTreeToAstTests : AstTest
                 )
             }
         );
-
-        AssertAstsEqual(moduleAst, ast);
+        AssertAstsEqual(expectedAst, ast);
     }
 }

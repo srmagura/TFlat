@@ -105,7 +105,6 @@ public class LexerTests
 
         var expected = new List<SimpleToken>
         {
-            new SimpleToken(TokenType.ExportKeyword, "export"),
             new SimpleToken(TokenType.FunKeyword, "fun"),
             new SimpleToken(TokenType.Identifier, "main"),
             new SimpleToken(TokenType.OpenParen, "("),

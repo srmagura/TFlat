@@ -1,23 +1,28 @@
 using TFlat.Compiler.AST;
+using TFlat.Compiler.Lexer;
+using TFlat.Compiler.Parser;
 using TFlat.Shared;
 
 namespace UnitTests.AST;
 
 [TestClass]
-public class SerializeAstTests
+public class SerializeAstTests : AstTest
 {
     [TestMethod]
     public async Task ItSerializesAndDeserializes()
     {
-        var ast = new ModuleAstNode(Array.Empty<FunctionDeclarationAstNode>());
+        var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
+        var parseResult = ModuleParser.Parse(tokens);
+        Assert.IsNotNull(parseResult);
+
+        var expectedAst = ParseTreeToAst.ConvertModule(parseResult.Node);
 
         using var memoryStream = new MemoryStream();
-        await AstSerializer.SerializeAsync(ast, memoryStream);
+        await AstSerializer.SerializeAsync(expectedAst, memoryStream);
 
         memoryStream.Position = 0;
-        var ast2 = await AstDeserializer.DeserializeAsync(memoryStream);
+        var ast = await AstDeserializer.DeserializeAsync(memoryStream);
 
-        Assert.IsNotNull(ast2);
-        Assert.AreEqual(0, ast2.Functions.Length);
+        AssertAstsEqual(expectedAst, ast);
     }
 }

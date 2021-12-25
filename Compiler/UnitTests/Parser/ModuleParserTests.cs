@@ -32,7 +32,7 @@ public class ModuleParserTests : ParserTest
             {
                 new FunctionDeclarationParseNode(
                     "main",
-                    Exported: true,
+                    Exported: false,
                     new []
                     {
                         statementParseTree

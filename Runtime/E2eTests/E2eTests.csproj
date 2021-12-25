@@ -15,9 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Compiler\TFlat.Compiler\TFlat.Compiler.csproj" />
     <ProjectReference Include="..\..\TestUtil\TestUtil.csproj" />
-    <ProjectReference Include="..\..\TFlat.Shared\TFlat.Shared.csproj" />
-    <ProjectReference Include="..\TFlat.Compiler\TFlat.Compiler.csproj" />
+    <ProjectReference Include="..\TFlat.Runtime\TFlat.Runtime.csproj" />
   </ItemGroup>
 
 </Project>
