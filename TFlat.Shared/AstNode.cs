@@ -14,6 +14,7 @@ public enum AstNodeType
     // Statements
     VariableDeclarationStatement,
     VariableDeclarationAndAssignmentStatement,
+    AssignmentStatement,
     FunctionCallStatement,
 
     // Top-level
@@ -50,6 +51,9 @@ public record VariableDeclarationStatementAstNode(string Variable, bool Const)
 public record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, bool Const, AstNode Value)
     : AstNode(AstNodeType.VariableDeclarationAndAssignmentStatement);
 
+public record AssignmentStatementAstNode(string Identifier, AstNode Value)
+    : AstNode(AstNodeType.AssignmentStatement);
+
 public record FunctionCallStatementAstNode(FunctionCallAstNode FunctionCall)
     : AstNode(AstNodeType.FunctionCallStatement);
 
@@ -77,6 +81,7 @@ public static class AstNodeTypeMap
         // Statements
         [AstNodeType.VariableDeclarationStatement] = typeof(VariableDeclarationStatementAstNode),
         [AstNodeType.VariableDeclarationAndAssignmentStatement] = typeof(VariableDeclarationAndAssignmentStatementAstNode),
+        [AstNodeType.AssignmentStatement] = typeof(AssignmentStatementAstNode),
         [AstNodeType.FunctionCallStatement] = typeof(FunctionCallStatementAstNode),
 
         // Top-level

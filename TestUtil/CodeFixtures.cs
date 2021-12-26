@@ -28,8 +28,11 @@ fun main(): void {
 
     public const string LetVariable = @"
 fun main(): void {
-    let a: int = 7;
-    print(a);
+    let my_variable: int = 7;
+    print(my_variable);
+
+    my_variable = 3;
+    print(my_variable);
 }
         ";
 }

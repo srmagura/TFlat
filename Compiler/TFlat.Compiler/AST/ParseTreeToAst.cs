@@ -27,11 +27,10 @@ internal static class ParseTreeToAst
     {
         return parseNode switch
         {
-            //VariableDeclarationStatementParseNode variableDeclaration => 
-            //    ConvertVariableDeclaration(variableDeclaration),
-            VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignmentStatement => 
-                ConvertVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignmentStatement),
-            FunctionCallStatementParseNode functionCallStatement => ConvertFunctionCallStatement(functionCallStatement),
+            VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignment => 
+                ConvertVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignment),
+            AssignmentStatementParseNode assignment => ConvertAssignmentStatement(assignment),
+            FunctionCallStatementParseNode functionCall => ConvertFunctionCallStatement(functionCall),
 
             _ => throw new Exception($"{parseNode.GetType().Name} is not a statement.")
         };
@@ -41,8 +40,16 @@ internal static class ParseTreeToAst
         ConvertVariableDeclarationAndAssignmentStatement(VariableDeclarationAndAssignmentStatementParseNode parseNode)
     {
         return new VariableDeclarationAndAssignmentStatementAstNode(
-            parseNode.Declaration.Variable,
+            parseNode.Declaration.Identifier,
             parseNode.Declaration.Const,
+            ConvertExpression(parseNode.Value)
+        );
+    }
+
+    private static AssignmentStatementAstNode ConvertAssignmentStatement(AssignmentStatementParseNode parseNode)
+    {
+        return new AssignmentStatementAstNode(
+            parseNode.Identifier,
             ConvertExpression(parseNode.Value)
         );
     }

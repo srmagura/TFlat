@@ -54,6 +54,6 @@ public class BasicTests
     public async Task LetVariable()
     {
         var output = await CompileAndRunAsync(CodeFixtures.LetVariable);
-        Assert.AreEqual("7", output);
+        Assert.AreEqual("7\n3", output);
     }
 }

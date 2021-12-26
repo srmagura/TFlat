@@ -20,6 +20,7 @@ internal enum ParseNodeType
     // Statements
     FunctionCallStatement,
     VariableDeclarationAndAssignmentStatement,
+    AssignmentStatement,
 
     // Top-level
     FunctionDeclaration,
@@ -54,7 +55,7 @@ internal record TypeParseNode(string TheType)
 
 // Statement parts
 
-internal record VariableDeclarationParseNode(string Variable, bool Const, TypeParseNode TypeAnnotation)
+internal record VariableDeclarationParseNode(string Identifier, bool Const, TypeParseNode TypeAnnotation)
     : ParseNode(ParseNodeType.VariableDeclaration);
 
 // Statements
@@ -64,6 +65,9 @@ internal record FunctionCallStatementParseNode(FunctionCallParseNode FunctionCal
 
 internal record VariableDeclarationAndAssignmentStatementParseNode(VariableDeclarationParseNode Declaration, ParseNode Value)
     : ParseNode(ParseNodeType.VariableDeclarationAndAssignmentStatement);
+
+internal record AssignmentStatementParseNode(string Identifier, ParseNode Value)
+    : ParseNode(ParseNodeType.AssignmentStatement);
 
 // Top-level
 

@@ -10,6 +10,10 @@ internal static class StatementParser
         if (variableDeclarationAndAssignmentStatement != null)
             return ParseResultUtil.Generic(variableDeclarationAndAssignmentStatement);
 
+        var assignmentStatement = ParseAssignmentStatement(tokens, position);
+        if (assignmentStatement != null)
+            return ParseResultUtil.Generic(assignmentStatement);
+
         var functionCallStatement = ParseFunctionCallStatement(tokens, position);
         if (functionCallStatement != null)
             return ParseResultUtil.Generic(functionCallStatement);
@@ -39,6 +43,34 @@ internal static class StatementParser
         return new ParseResult<VariableDeclarationAndAssignmentStatementParseNode>(
             new VariableDeclarationAndAssignmentStatementParseNode(
                 variableDeclarationResult.Node,
+                valueResult.Node
+            ),
+            i - position
+        );
+    }
+
+    private static ParseResult<AssignmentStatementParseNode>?
+        ParseAssignmentStatement(Token[] tokens, int position)
+    {
+        var i = position;
+
+        if (tokens[i].Type != TokenType.Identifier) return null;
+        var identifier = tokens[i].Value;
+        i++;
+
+        if (tokens[i].Type != TokenType.SingleEqual) return null;
+        i++;
+
+        var valueResult = ExpressionParser.Parse(tokens, i);
+        if (valueResult == null) return null;
+        i += valueResult.ConsumedTokens;
+
+        if (tokens[i].Type != TokenType.Semicolon) return null;
+        i++;
+
+        return new ParseResult<AssignmentStatementParseNode>(
+            new AssignmentStatementParseNode(
+                identifier,
                 valueResult.Node
             ),
             i - position

@@ -41,11 +41,14 @@ internal static class ModuleRunner
     {
         switch (statement)
         {
-            case VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignmentStatement:
-                RunVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignmentStatement, scopeStack);
+            case VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignment:
+                RunVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignment, scopeStack);
                 break;
-            case FunctionCallStatementAstNode functionCallStatement:
-                RunFunctionCallStatement(functionCallStatement, scopeStack);
+            case AssignmentStatementAstNode assignment:
+                RunAssignmentStatement(assignment, scopeStack);
+                break;
+            case FunctionCallStatementAstNode functionCall:
+                RunFunctionCallStatement(functionCall, scopeStack);
                 break;
             default:
                 throw new Exception($"{statement.GetType().Name} is not a statement.");
@@ -59,6 +62,15 @@ internal static class ModuleRunner
     {
         scopeStack.Current.Variables[variableDeclarationAndAssignmentStatement.Identifier] =
             ExpressionEvaluator.Evaluate(variableDeclarationAndAssignmentStatement.Value, scopeStack);
+    }
+
+    private static void RunAssignmentStatement(
+        AssignmentStatementAstNode assignmentStatement,
+        ScopeStack scopeStack
+    )
+    {
+        scopeStack.Current.Variables[assignmentStatement.Identifier] =
+            ExpressionEvaluator.Evaluate(assignmentStatement.Value, scopeStack);
     }
 
     private static void RunFunctionCallStatement(FunctionCallStatementAstNode functionCallStatement, ScopeStack scopeStack)

@@ -139,4 +139,54 @@ public class CodeToAstTests : AstTest
 
         AssertAstsEqual(expected, actual);
     }
+
+    [TestMethod]
+    public void LetVariable()
+    {
+        var actual = Compile(CodeFixtures.LetVariable);
+
+        var main = new FunctionDeclarationAstNode(
+            "main",
+            Exported: false,
+            Statements: new AstNode[]
+            {
+                new VariableDeclarationAndAssignmentStatementAstNode(
+                    "my_variable",
+                    Const: false,
+                    new IntLiteralAstNode(7)
+                ),
+                new FunctionCallStatementAstNode(
+                    new FunctionCallAstNode(
+                        "print",
+                        new []
+                        {
+                            new VariableReferenceAstNode("my_variable")
+                        }
+                    )
+                ),
+                new AssignmentStatementAstNode(
+                    "my_variable",
+                    new IntLiteralAstNode(3)
+                ),
+                new FunctionCallStatementAstNode(
+                    new FunctionCallAstNode(
+                        "print",
+                        new []
+                        {
+                            new VariableReferenceAstNode("my_variable")
+                        }
+                    )
+                )
+            }
+        );
+
+        var expected = new ModuleAstNode(
+            new[]
+            {
+                main
+            }
+        );
+
+        AssertAstsEqual(expected, actual);
+    }
 }

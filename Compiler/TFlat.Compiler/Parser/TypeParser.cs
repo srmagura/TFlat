@@ -8,12 +8,18 @@ internal static class TypeParser
     {
         var i = position;
 
-        if(tokens[i].Type == TokenType.StringKeyword)
+        switch(tokens[i].Type)
         {
-            return new ParseResult<TypeParseNode>(
-                new TypeParseNode("string"),
-                1
-            );
+            case TokenType.IntKeyword:
+                return new ParseResult<TypeParseNode>(
+                    new TypeParseNode("int"),
+                    1
+                );
+            case TokenType.StringKeyword:
+                return new ParseResult<TypeParseNode>(
+                    new TypeParseNode("string"),
+                    1
+                );
         }
 
         return null;

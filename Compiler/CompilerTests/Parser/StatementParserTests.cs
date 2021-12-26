@@ -102,6 +102,36 @@ public class StatementParserTests : ParserTest
     }
 
     [TestMethod]
+    public void LetVariable()
+    {
+        var code = @"let my_variable: int = 7;";
+
+        var expected = new VariableDeclarationAndAssignmentStatementParseNode(
+            new VariableDeclarationParseNode(
+                "my_variable",
+                Const: false,
+                new TypeParseNode("int")
+            ),
+            new IntLiteralParseNode(7)
+        );
+
+        TestStatementParse(code, expected);
+    }
+
+    [TestMethod]
+    public void Assignment()
+    {
+        var code = @"my_variable = 3;";
+
+        var expected = new AssignmentStatementParseNode(
+            "my_variable",
+            new IntLiteralParseNode(3)
+        );
+
+        TestStatementParse(code, expected);
+    }
+
+    [TestMethod]
     public void PrintVariable()
     {
         var code = @"print(a);";
