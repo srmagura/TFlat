@@ -114,7 +114,7 @@ internal static class TheLexer
             switch (cc)
             {
                 case "**": return new SimpleToken(TokenType.DoubleAsterisk, cc);
-                case "//": return new SimpleToken(TokenType.DoubleSlash, cc);
+                case @"\\": return new SimpleToken(TokenType.DoubleBackslash, cc);
             };
         }
 

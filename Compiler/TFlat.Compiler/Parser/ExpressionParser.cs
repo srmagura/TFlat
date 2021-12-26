@@ -135,7 +135,7 @@ internal static class ExpressionParser
         [TokenType.Asterisk] = BinaryOperator.Multiplication,
         [TokenType.DoubleAsterisk] = BinaryOperator.Exponentiation,
         [TokenType.Slash] = BinaryOperator.Division,
-        [TokenType.DoubleSlash] = BinaryOperator.IntegerDivision,
+        [TokenType.DoubleBackslash] = BinaryOperator.IntegerDivision,
     };
 
     private static ParseResult<BinaryOperationParseNode>? ParseBinaryOperation(Token[] tokens, int position)

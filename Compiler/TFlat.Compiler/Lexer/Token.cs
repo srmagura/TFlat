@@ -33,7 +33,7 @@ internal enum TokenType
     Asterisk,
     DoubleAsterisk,
     Slash,
-    DoubleSlash,
+    DoubleBackslash,
     SingleEqual
 }
 

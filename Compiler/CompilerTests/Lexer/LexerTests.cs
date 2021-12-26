@@ -119,8 +119,8 @@ public class LexerTests
         token = TheLexer.Lex("/").Single();
         Assert.AreEqual(new Token(TokenType.Slash, "/", 1, 1), token);
 
-        token = TheLexer.Lex("//").Single();
-        Assert.AreEqual(new Token(TokenType.DoubleSlash, "//", 1, 1), token);
+        token = TheLexer.Lex(@"\\").Single();
+        Assert.AreEqual(new Token(TokenType.DoubleBackslash, @"\\", 1, 1), token);
     }
 
     private static SimpleToken ToSimpleToken(Token token)

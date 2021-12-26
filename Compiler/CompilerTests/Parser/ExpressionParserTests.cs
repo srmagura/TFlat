@@ -73,7 +73,7 @@ public class ExpressionParserTests : ParserTest
             new IntLiteralParseNode(1),
             new IntLiteralParseNode(2)
         );
-        TestExpressionParse("1 // 2", expected);
+        TestExpressionParse(@"1 \\ 2", expected);
 
         expected = new BinaryOperationParseNode(
             BinaryOperator.Exponentiation,
