@@ -1,78 +1,59 @@
+using TFlat.Shared;
+
 namespace TFlat.Compiler.Parser;
 
-internal enum ParseNodeType
-{
-    // Literals
-    BoolLiteral,
-    IntLiteral,
-    StringLiteral,
-
-    // Expressions
-    IdentifierExpression,
-    FunctionCall,
-
-    // Type annotations
-    Type,
-
-    // Statement parts
-    VariableDeclaration,
-
-    // Statements
-    FunctionCallStatement,
-    VariableDeclarationAndAssignmentStatement,
-    AssignmentStatement,
-
-    // Top-level
-    FunctionDeclaration,
-    Module
-}
-
-internal abstract record ParseNode(ParseNodeType Type);
+internal abstract record ParseNode();
 
 // Literals
 
 internal record BoolLiteralParseNode(bool Value)
-    : ParseNode(ParseNodeType.BoolLiteral);
+    : ParseNode();
 
 internal record IntLiteralParseNode(int Value)
-    : ParseNode(ParseNodeType.IntLiteral);
+    : ParseNode();
 
 internal record StringLiteralParseNode(string Value) 
-    : ParseNode(ParseNodeType.StringLiteral);
+    : ParseNode();
 
 // Expressions
 
 internal record IdentifierExpressionParseNode(string Identifier)
-    : ParseNode(ParseNodeType.IdentifierExpression);
+    : ParseNode();
 
 internal record FunctionCallParseNode(string Function, ParseNode[] Arguments)
-    : ParseNode(ParseNodeType.FunctionCall);
+    : ParseNode();
+
+internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
+    : ParseNode();
+
+internal record BinaryOperationParseNode(BinaryOperator Operator, ParseNode Operand0, ParseNode Operand1)
+    : ParseNode();
 
 // Type annotations
 
 internal record TypeParseNode(string TheType)
-    : ParseNode(ParseNodeType.Type);
+    : ParseNode();
 
 // Statement parts
 
 internal record VariableDeclarationParseNode(string Identifier, bool Const, TypeParseNode TypeAnnotation)
-    : ParseNode(ParseNodeType.VariableDeclaration);
+    : ParseNode();
 
 // Statements
 
 internal record FunctionCallStatementParseNode(FunctionCallParseNode FunctionCall)
-    : ParseNode(ParseNodeType.FunctionCallStatement);
+    : ParseNode();
 
 internal record VariableDeclarationAndAssignmentStatementParseNode(VariableDeclarationParseNode Declaration, ParseNode Value)
-    : ParseNode(ParseNodeType.VariableDeclarationAndAssignmentStatement);
+    : ParseNode();
 
 internal record AssignmentStatementParseNode(string Identifier, ParseNode Value)
-    : ParseNode(ParseNodeType.AssignmentStatement);
+    : ParseNode();
 
 // Top-level
 
 internal record FunctionDeclarationParseNode(string Name, bool Exported, ParseNode[] Statements)
-    : ParseNode(ParseNodeType.FunctionDeclaration);
+    : ParseNode();
 
 internal record ModuleParseNode(FunctionDeclarationParseNode[] FunctionDeclarations)
-    : ParseNode(ParseNodeType.Module);
+    : ParseNode();

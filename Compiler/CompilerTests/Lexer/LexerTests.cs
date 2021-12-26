@@ -101,6 +101,28 @@ public class LexerTests
         Assert.AreEqual(new Token(TokenType.VoidKeyword, "void", 1, 1), token);
     }
 
+    [TestMethod]
+    public void Operators()
+    {
+        var token = TheLexer.Lex("+").Single();
+        Assert.AreEqual(new Token(TokenType.Plus, "+", 1, 1), token);
+
+        token = TheLexer.Lex("-").Single();
+        Assert.AreEqual(new Token(TokenType.Minus, "-", 1, 1), token);
+
+        token = TheLexer.Lex("*").Single();
+        Assert.AreEqual(new Token(TokenType.Asterisk, "*", 1, 1), token);
+
+        token = TheLexer.Lex("**").Single();
+        Assert.AreEqual(new Token(TokenType.DoubleAsterisk, "**", 1, 1), token);
+
+        token = TheLexer.Lex("/").Single();
+        Assert.AreEqual(new Token(TokenType.Slash, "/", 1, 1), token);
+
+        token = TheLexer.Lex("//").Single();
+        Assert.AreEqual(new Token(TokenType.DoubleSlash, "//", 1, 1), token);
+    }
+
     private static SimpleToken ToSimpleToken(Token token)
     {
         return new SimpleToken(token.Type, token.Value);

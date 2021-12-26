@@ -10,6 +10,8 @@ public enum AstNodeType
     // Expressions
     VariableReference,
     FunctionCall,
+    UnaryOperation,
+    BinaryOperation,
 
     // Statements
     VariableDeclarationStatement,
@@ -42,6 +44,12 @@ public record VariableReferenceAstNode(string Identifier)
 
 public record FunctionCallAstNode(string Function, AstNode[] Arguments)
     : AstNode(AstNodeType.FunctionCall);
+
+public record UnaryOperationAstNode(UnaryOperator Operator, AstNode Operand)
+    : AstNode(AstNodeType.UnaryOperation);
+
+public record BinaryOperationAstNode(BinaryOperator Operator, AstNode Operand0, AstNode Operand1)
+    : AstNode(AstNodeType.BinaryOperation);
 
 // Statements
 
@@ -77,6 +85,8 @@ public static class AstNodeTypeMap
         // Expressions
         [AstNodeType.VariableReference] = typeof(VariableReferenceAstNode),
         [AstNodeType.FunctionCall] = typeof(FunctionCallAstNode),
+        [AstNodeType.UnaryOperation] = typeof(UnaryOperationAstNode),
+        [AstNodeType.BinaryOperation] = typeof(BinaryOperationAstNode),
 
         // Statements
         [AstNodeType.VariableDeclarationStatement] = typeof(VariableDeclarationStatementAstNode),

@@ -1,32 +1,85 @@
+using System.Text.Json.Serialization;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
 
 namespace UnitTests.Parser;
 
 [TestClass]
-public class ExpressionParserTests
+public class ExpressionParserTests : ParserTest
 {
-    [TestMethod]
-    public void ItParsesIntLiteral()
+   
+    private static void TestExpressionParse(string code, ParseNode expected)
     {
-        var code = "2";
         var tokens = TheLexer.Lex(code);
-
         var result = ExpressionParser.Parse(tokens, 0);
+
         Assert.IsNotNull(result);
-        Assert.AreEqual(2, ((IntLiteralParseNode)result.Node).Value);
-        Assert.AreEqual(1, result.ConsumedTokens);
+        AssertParseTreesEqual(expected, result.Node);
+        Assert.AreEqual(tokens.Length, result.ConsumedTokens);
     }
 
     [TestMethod]
-    public void ItParsesStringLiteral()
+    public void IntLiteral()
     {
-        var code = "\"foo\"";
-        var tokens = TheLexer.Lex(code);
+        TestExpressionParse("2", new IntLiteralParseNode(2));
+    }
 
-        var result = ExpressionParser.Parse(tokens, 0);
-        Assert.IsNotNull(result);
-        Assert.AreEqual("foo", ((StringLiteralParseNode)result.Node).Value);
-        Assert.AreEqual(1, result.ConsumedTokens);
+    [TestMethod]
+    public void StringLiteral()
+    {
+        TestExpressionParse("\"foo\"", new StringLiteralParseNode("foo"));
+    }
+
+    [TestMethod]
+    public void Negation()
+    {
+        var expected = new UnaryOperationParseNode(UnaryOperator.Negation, new IntLiteralParseNode(1));
+        TestExpressionParse("-1", expected);
+    }
+
+    [TestMethod]
+    public void BinaryOperation()
+    {
+        var expected = new BinaryOperationParseNode(
+            BinaryOperator.Addition, 
+            new IntLiteralParseNode(1), 
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 + 2", expected);
+
+        expected = new BinaryOperationParseNode(
+            BinaryOperator.Subtraction,
+            new IntLiteralParseNode(1),
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 - 2", expected);
+
+        expected = new BinaryOperationParseNode(
+            BinaryOperator.Multiplication,
+            new IntLiteralParseNode(1),
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 * 2", expected);
+
+        expected = new BinaryOperationParseNode(
+            BinaryOperator.Division,
+            new IntLiteralParseNode(1),
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 / 2", expected);
+
+        expected = new BinaryOperationParseNode(
+            BinaryOperator.IntegerDivision,
+            new IntLiteralParseNode(1),
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 // 2", expected);
+
+        expected = new BinaryOperationParseNode(
+            BinaryOperator.Exponentiation,
+            new IntLiteralParseNode(1),
+            new IntLiteralParseNode(2)
+        );
+        TestExpressionParse("1 ** 2", expected);
     }
 }

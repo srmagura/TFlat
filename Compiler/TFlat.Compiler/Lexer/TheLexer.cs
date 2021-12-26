@@ -107,10 +107,25 @@ internal static class TheLexer
 
     private static SimpleToken? LexOperator(string s, int position)
     {
+        if (position + 1 < s.Length)
+        {
+            var cc = s.Substring(position, 2);
+
+            switch (cc)
+            {
+                case "**": return new SimpleToken(TokenType.DoubleAsterisk, cc);
+                case "//": return new SimpleToken(TokenType.DoubleSlash, cc);
+            };
+        }
+
         var c = s[position];
 
         return c switch
         {
+            '+' => new SimpleToken(TokenType.Plus, c.ToString()),
+            '-' => new SimpleToken(TokenType.Minus, c.ToString()),
+            '*' => new SimpleToken(TokenType.Asterisk, c.ToString()),
+            '/' => new SimpleToken(TokenType.Slash, c.ToString()),
             '=' => new SimpleToken(TokenType.SingleEqual, c.ToString()),
 
             _ => null

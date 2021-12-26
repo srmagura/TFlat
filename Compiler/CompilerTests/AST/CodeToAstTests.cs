@@ -15,6 +15,16 @@ public class CodeToAstTests : AstTest
         return ParseTreeToAst.ConvertModule(parseTree);
     }
 
+    private static FunctionCallStatementAstNode Print(AstNode argument)
+    {
+        return new FunctionCallStatementAstNode(
+            new FunctionCallAstNode(
+                "print",
+                new[] { argument }
+            )
+        );
+    }
+
     [TestMethod]
     public void HelloWorld()
     {
@@ -25,15 +35,7 @@ public class CodeToAstTests : AstTest
             Exported: false,
             new[]
             {
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new[]
-                        {
-                            new StringLiteralAstNode("hello world")
-                        }
-                    )
-                )
+                Print(new StringLiteralAstNode("hello world"))
             }
         );
 
@@ -57,15 +59,7 @@ public class CodeToAstTests : AstTest
             Exported: false,
             Statements: new[]
             {
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new[]
-                        {
-                            new IntLiteralAstNode(3)
-                        }
-                    )
-                )
+                Print(new IntLiteralAstNode(3))
             }
         );
 
@@ -80,15 +74,7 @@ public class CodeToAstTests : AstTest
                         Array.Empty<AstNode>()
                     )
                 ),
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new[]
-                        {
-                            new StringLiteralAstNode(".14159")
-                        }
-                    )
-                )
+                Print(new StringLiteralAstNode(".14159"))
             }
         );
 
@@ -118,15 +104,7 @@ public class CodeToAstTests : AstTest
                     Const: true,
                     new StringLiteralAstNode("apple")
                 ),
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new []
-                        {
-                            new VariableReferenceAstNode("a")
-                        }
-                    )
-                )
+                Print(new VariableReferenceAstNode("a"))
             }
         );
 
@@ -155,28 +133,69 @@ public class CodeToAstTests : AstTest
                     Const: false,
                     new IntLiteralAstNode(7)
                 ),
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new []
-                        {
-                            new VariableReferenceAstNode("my_variable")
-                        }
-                    )
-                ),
+                Print(new VariableReferenceAstNode("my_variable")),
                 new AssignmentStatementAstNode(
                     "my_variable",
                     new IntLiteralAstNode(3)
                 ),
-                new FunctionCallStatementAstNode(
-                    new FunctionCallAstNode(
-                        "print",
-                        new []
-                        {
-                            new VariableReferenceAstNode("my_variable")
-                        }
-                    )
-                )
+                Print(new VariableReferenceAstNode("my_variable")),
+            }
+        );
+
+        var expected = new ModuleAstNode(
+            new[]
+            {
+                main
+            }
+        );
+
+        AssertAstsEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void MathOperators()
+    {
+        var actual = Compile(CodeFixtures.MathOperators);
+
+        var main = new FunctionDeclarationAstNode(
+            "main",
+            Exported: false,
+            Statements: new AstNode[]
+            {
+                Print(new UnaryOperationAstNode(
+                    UnaryOperator.Negation, 
+                    new IntLiteralAstNode(3)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.Addition,
+                    new IntLiteralAstNode(1),
+                    new IntLiteralAstNode(2)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.Subtraction,
+                    new IntLiteralAstNode(1),
+                    new IntLiteralAstNode(2)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.Multiplication,
+                    new IntLiteralAstNode(1),
+                    new IntLiteralAstNode(2)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.IntegerDivision,
+                    new IntLiteralAstNode(1),
+                    new IntLiteralAstNode(2)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.IntegerDivision,
+                    new IntLiteralAstNode(2),
+                    new IntLiteralAstNode(2)
+                )),
+                Print(new BinaryOperationAstNode(
+                    BinaryOperator.Exponentiation,
+                    new IntLiteralAstNode(2),
+                    new IntLiteralAstNode(3)
+                )),
             }
         );
 

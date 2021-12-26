@@ -76,7 +76,9 @@ internal static class ParseTreeToAst
         {
             IntLiteralParseNode intLiteral => ConvertIntLiteral(intLiteral),
             StringLiteralParseNode stringLiteral => ConvertStringLiteral(stringLiteral),
-            
+            UnaryOperationParseNode unaryOperation => ConvertUnaryOperation(unaryOperation),
+            BinaryOperationParseNode binaryOperation => ConvertBinaryOperation(binaryOperation),
+
             IdentifierExpressionParseNode identifierExpression => ConvertIdentifierExpression(identifierExpression),
 
             _ => throw new Exception($"Could not convert to expression: {parseNode.GetType().Name}.")
@@ -96,5 +98,19 @@ internal static class ParseTreeToAst
     private static VariableReferenceAstNode ConvertIdentifierExpression(IdentifierExpressionParseNode parseNode)
     {
         return new VariableReferenceAstNode(parseNode.Identifier);
+    }
+
+    private static UnaryOperationAstNode ConvertUnaryOperation(UnaryOperationParseNode parseNode)
+    {
+        return new UnaryOperationAstNode(parseNode.Operator, ConvertExpression(parseNode.Operand));
+    }
+
+    private static BinaryOperationAstNode ConvertBinaryOperation(BinaryOperationParseNode parseNode)
+    {
+        return new BinaryOperationAstNode(
+            parseNode.Operator,
+            ConvertExpression(parseNode.Operand0),
+            ConvertExpression(parseNode.Operand1)
+        );
     }
 }
