@@ -11,7 +11,13 @@ internal enum TokenType
     // Keywords
     ExportKeyword,
     FunKeyword,
+    LetKeyword,
+    ConstKeyword,
+    
     VoidKeyword,
+    IntKeyword,
+    StringKeyword,
+    BoolKeyword,
 
     // Separators
     Semicolon,
@@ -20,5 +26,8 @@ internal enum TokenType
     CloseParen,
     OpenCurlyBrace,
     CloseCurlyBrace,
+
+    // Operators
+    SingleEqual
 }
 

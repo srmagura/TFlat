@@ -20,27 +20,27 @@ public class CodeToAstTests : AstTest
     {
         var actual = Compile(CodeFixtures.HelloWorld);
 
-        var statement = new StatementAstNode(
-            new FunctionCallAstNode(
-                "print",
-                new[]
-                {
-                    new StringLiteralAstNode("hello world")
-                }
-            )
+        var main = new FunctionDeclarationAstNode(
+            "main",
+            Exported: false,
+            new[]
+            {
+                new FunctionCallStatementAstNode(
+                    new FunctionCallAstNode(
+                        "print",
+                        new[]
+                        {
+                            new StringLiteralAstNode("hello world")
+                        }
+                    )
+                )
+            }
         );
 
         var expected = new ModuleAstNode(
             new[]
             {
-                new FunctionDeclarationAstNode(
-                    "main",
-                    Exported: false,
-                    new []
-                    {
-                        statement
-                    }
-                )
+                main
             }
         );
 
@@ -57,7 +57,7 @@ public class CodeToAstTests : AstTest
             Exported: false,
             Statements: new[]
             {
-                new StatementAstNode(
+                new FunctionCallStatementAstNode(
                     new FunctionCallAstNode(
                         "print",
                         new[]
@@ -74,13 +74,13 @@ public class CodeToAstTests : AstTest
             Exported: false,
             Statements: new[]
             {
-                new StatementAstNode(
+                new FunctionCallStatementAstNode(
                     new FunctionCallAstNode(
                         "print3",
                         Array.Empty<AstNode>()
                     )
                 ),
-                new StatementAstNode(
+                new FunctionCallStatementAstNode(
                     new FunctionCallAstNode(
                         "print",
                         new[]
@@ -96,6 +96,43 @@ public class CodeToAstTests : AstTest
             new[]
             {
                 print3,
+                main
+            }
+        );
+
+        AssertAstsEqual(expected, actual);
+    }
+
+    [TestMethod]
+    public void ConstVariable()
+    {
+        var actual = Compile(CodeFixtures.ConstVariable);
+
+        var main = new FunctionDeclarationAstNode(
+            "main",
+            Exported: false,
+            Statements: new AstNode[]
+            {
+                new VariableDeclarationAndAssignmentStatementAstNode(
+                    "a", 
+                    Const: true,
+                    new StringLiteralAstNode("apple")
+                ),
+                new FunctionCallStatementAstNode(
+                    new FunctionCallAstNode(
+                        "print",
+                        new []
+                        {
+                            new VariableReferenceAstNode("a")
+                        }
+                    )
+                )
+            }
+        );
+
+        var expected = new ModuleAstNode(
+            new[]
+            {
                 main
             }
         );

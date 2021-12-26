@@ -60,6 +60,7 @@ internal static class TheLexer
             if (ConsumeWhitespace()) continue;
 
             if (TryLex(LexKeyword)) continue;
+            if (TryLex(LexOperator)) continue;
             if (TryLex(LexIdentifier)) continue;
             if (TryLex(LexIntLiteral)) continue;
             if (TryLex(LexStringLiteral)) continue;
@@ -92,7 +93,26 @@ internal static class TheLexer
         {
             "export" => new SimpleToken(TokenType.ExportKeyword, keyword),
             "fun" => new SimpleToken(TokenType.FunKeyword, keyword),
+            "let" => new SimpleToken(TokenType.LetKeyword, keyword),
+            "const" => new SimpleToken(TokenType.ConstKeyword, keyword),
+
             "void" => new SimpleToken(TokenType.VoidKeyword, keyword),
+            "int" => new SimpleToken(TokenType.IntKeyword, keyword),
+            "string" => new SimpleToken(TokenType.StringKeyword, keyword),
+            "bool" => new SimpleToken(TokenType.BoolKeyword, keyword),
+
+            _ => null
+        };
+    }
+
+    private static SimpleToken? LexOperator(string s, int position)
+    {
+        var c = s[position];
+
+        return c switch
+        {
+            '=' => new SimpleToken(TokenType.SingleEqual, c.ToString()),
+
             _ => null
         };
     }
@@ -143,7 +163,7 @@ internal static class TheLexer
             if (s[i] == '"')
             {
                 return new SimpleToken(
-                    TokenType.StringLiteral, 
+                    TokenType.StringLiteral,
                     s.Substring(position, i - position + 1)
                 );
             }

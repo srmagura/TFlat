@@ -126,6 +126,27 @@ public class LexerTests
     }
 
     [TestMethod]
+    public void ConstVariable()
+    {
+        var simpleTokens = TheLexer.Lex(@"const a: string = ""apple"";")
+            .Select(ToSimpleToken)
+            .ToList();
+
+        var expected = new List<SimpleToken>
+        {
+            new SimpleToken(TokenType.ConstKeyword, "const"),
+            new SimpleToken(TokenType.Identifier, "a"),
+            new SimpleToken(TokenType.Colon, ":"),
+            new SimpleToken(TokenType.StringKeyword, "string"),
+            new SimpleToken(TokenType.SingleEqual, "="),
+            new SimpleToken(TokenType.StringLiteral, @"""apple"""),
+            new SimpleToken(TokenType.Semicolon, ";"),
+        };
+
+        CollectionAssert.AreEqual(expected, simpleTokens);
+    }
+
+    [TestMethod]
     public void HelloWorld()
     {
         var simpleTokens = TheLexer.Lex(CodeFixtures.HelloWorld)

@@ -1,3 +1,4 @@
+using TFlat.Runtime.Instances;
 using TFlat.Shared;
 
 namespace TFlat.Runtime;
@@ -16,28 +17,53 @@ internal static class ModuleRunner
         var moduleScope = new Scope();
 
         foreach (var f in ast.FunctionDeclarations)
-            moduleScope.Variables[f.Name] = f;
-
-        // Main function does not have to be exported
-        if (!moduleScope.Variables.TryGetValue("main", out var mainFunction))
-            throw new Exception("Module did not contain a function named \"main\".");
+            moduleScope.Variables[f.Name] = new TfFunction(f.Name, f);
 
         var scopeStack = new ScopeStack(moduleScope);
 
-        RunFunction(mainFunction, scopeStack);
+        // Main function does not have to be exported
+        var main = scopeStack.ResolveVariable<TfFunction>("main");
+
+        RunFunction(main, scopeStack);
     }
 
-    private static void RunFunction(FunctionDeclarationAstNode functionDeclaration, ScopeStack scopeStack)
+    private static void RunFunction(TfFunction function, ScopeStack scopeStack)
     {
-        foreach (var statement in functionDeclaration.Statements)
+        scopeStack.PushNew();
+
+        foreach (var statement in function.Ast.Statements)
         {
             RunStatement(statement, scopeStack);
         }
     }
 
-    private static void RunStatement(StatementAstNode statement, ScopeStack scopeStack)
+    private static void RunStatement(AstNode statement, ScopeStack scopeStack)
     {
-        RunFunctionCall(statement.FunctionCall, scopeStack);
+        switch (statement)
+        {
+            case VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignmentStatement:
+                RunVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignmentStatement, scopeStack);
+                break;
+            case FunctionCallStatementAstNode functionCallStatement:
+                RunFunctionCallStatement(functionCallStatement, scopeStack);
+                break;
+            default:
+                throw new Exception($"{statement.GetType().Name} is not a statement.");
+        }
+    }
+
+    private static void RunVariableDeclarationAndAssignmentStatement(
+        VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignmentStatement,
+        ScopeStack scopeStack
+    )
+    {
+        scopeStack.Current.Variables[variableDeclarationAndAssignmentStatement.Identifier] =
+            ExpressionEvaluator.Evaluate(variableDeclarationAndAssignmentStatement.Value, scopeStack);
+    }
+
+    private static void RunFunctionCallStatement(FunctionCallStatementAstNode functionCallStatement, ScopeStack scopeStack)
+    {
+        RunFunctionCall(functionCallStatement.FunctionCall, scopeStack);
     }
 
     private static void RunFunctionCall(FunctionCallAstNode functionCall, ScopeStack scopeStack)
@@ -46,29 +72,20 @@ internal static class ModuleRunner
 
         if (functionName == "print")
         {
-            Print(functionCall.Arguments);
+            Print(functionCall.Arguments, scopeStack);
             return;
         }
 
-        var function = scopeStack.ResolveVariable(functionName);
+        var function = scopeStack.ResolveVariable<TfFunction>(functionName);
         RunFunction(function, scopeStack.NewForTopLevelFunction());
     }
 
-    private static void Print(AstNode[] arguments)
+    private static void Print(AstNode[] arguments, ScopeStack scopeStack)
     {
         if (arguments.Length != 1)
             throw new Exception("print expected exactly 1 argument.");
 
-        switch (arguments[0])
-        {
-            case IntLiteralAstNode intLiteral:
-                _executionOptions.StandardOut.WriteLine(intLiteral.Value);
-                break;
-            case StringLiteralAstNode stringLiteral:
-                _executionOptions.StandardOut.WriteLine(stringLiteral.Value);
-                break;
-            default:
-                throw new Exception("print was called with an invalid argument.");
-        }
+        var argument = ExpressionEvaluator.Evaluate(arguments[0], scopeStack);
+        _executionOptions.StandardOut.WriteLine(argument.ToString());
     }
 }

@@ -49,4 +49,11 @@ public class BasicTests
         var output = await CompileAndRunAsync(CodeFixtures.ConstVariable);
         Assert.AreEqual("apple", output);
     }
+
+    [TestMethod]
+    public async Task LetVariable()
+    {
+        var output = await CompileAndRunAsync(CodeFixtures.LetVariable);
+        Assert.AreEqual("7", output);
+    }
 }

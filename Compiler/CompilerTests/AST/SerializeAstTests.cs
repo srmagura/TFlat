@@ -24,4 +24,13 @@ public class SerializeAstTests : AstTest
 
         AssertAstsEqual(expectedAst, actualAst);
     }
+
+    [TestMethod]
+    public void AstNodeTypeMapIsComplete()
+    {
+        foreach (var x in Enum.GetValues<AstNodeType>())
+        {
+            Assert.IsInstanceOfType(AstNodeTypeMap.Map[x], typeof(Type), $"{x} is not in the map.");
+        }
+    }
 }

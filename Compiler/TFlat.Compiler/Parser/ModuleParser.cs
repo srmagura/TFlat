@@ -54,7 +54,7 @@ internal class ModuleParser
         if (tokens[i].Type != TokenType.OpenCurlyBrace) return null;
         i++;
 
-        var statements = new List<StatementParseNode>();
+        var statements = new List<ParseNode>();
 
         while(i < tokens.Length)
         {

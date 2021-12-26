@@ -23,11 +23,35 @@ internal static class ParseTreeToAst
         return new FunctionDeclarationAstNode(parseNode.Name, parseNode.Exported, statements);
     }
 
-    private static StatementAstNode ConvertStatement(StatementParseNode parseNode)
+    private static AstNode ConvertStatement(ParseNode parseNode)
     {
-        var functionCall = ConvertFunctionCall(parseNode.FunctionCall);
+        return parseNode switch
+        {
+            //VariableDeclarationStatementParseNode variableDeclaration => 
+            //    ConvertVariableDeclaration(variableDeclaration),
+            VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignmentStatement => 
+                ConvertVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignmentStatement),
+            FunctionCallStatementParseNode functionCallStatement => ConvertFunctionCallStatement(functionCallStatement),
 
-        return new StatementAstNode(functionCall);
+            _ => throw new Exception($"{parseNode.GetType().Name} is not a statement.")
+        };
+    }
+
+    private static VariableDeclarationAndAssignmentStatementAstNode 
+        ConvertVariableDeclarationAndAssignmentStatement(VariableDeclarationAndAssignmentStatementParseNode parseNode)
+    {
+        return new VariableDeclarationAndAssignmentStatementAstNode(
+            parseNode.Declaration.Variable,
+            parseNode.Declaration.Const,
+            ConvertExpression(parseNode.Value)
+        );
+    }
+
+    private static FunctionCallStatementAstNode ConvertFunctionCallStatement(FunctionCallStatementParseNode parseNode)
+    {
+        return new FunctionCallStatementAstNode(
+            ConvertFunctionCall(parseNode.FunctionCall)
+        );
     }
 
     private static FunctionCallAstNode ConvertFunctionCall(FunctionCallParseNode parseNode)
@@ -41,13 +65,15 @@ internal static class ParseTreeToAst
 
     private static AstNode ConvertExpression(ParseNode parseNode)
     {
-        if (parseNode is IntLiteralParseNode intLiteral)
-            return ConvertIntLiteral(intLiteral);
+        return parseNode switch
+        {
+            IntLiteralParseNode intLiteral => ConvertIntLiteral(intLiteral),
+            StringLiteralParseNode stringLiteral => ConvertStringLiteral(stringLiteral),
+            
+            IdentifierExpressionParseNode identifierExpression => ConvertIdentifierExpression(identifierExpression),
 
-        if (parseNode is StringLiteralParseNode stringLiteral)
-            return ConvertStringLiteral(stringLiteral);
-
-        throw new Exception($"Could not convert to expression: {parseNode.GetType().Name}.");
+            _ => throw new Exception($"Could not convert to expression: {parseNode.GetType().Name}.")
+        };
     }
 
     private static IntLiteralAstNode ConvertIntLiteral(IntLiteralParseNode parseNode)
@@ -58,5 +84,10 @@ internal static class ParseTreeToAst
     private static StringLiteralAstNode ConvertStringLiteral(StringLiteralParseNode parseNode)
     {
         return new StringLiteralAstNode(parseNode.Value);
+    }
+
+    private static VariableReferenceAstNode ConvertIdentifierExpression(IdentifierExpressionParseNode parseNode)
+    {
+        return new VariableReferenceAstNode(parseNode.Identifier);
     }
 }

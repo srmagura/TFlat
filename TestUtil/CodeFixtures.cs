@@ -21,7 +21,14 @@ fun main(): void {
 
     public const string ConstVariable = @"
 fun main(): void {
-    const a = ""apple"";
+    const a: string = ""apple"";
+    print(a);
+}
+        ";
+
+    public const string LetVariable = @"
+fun main(): void {
+    let a: int = 7;
     print(a);
 }
         ";

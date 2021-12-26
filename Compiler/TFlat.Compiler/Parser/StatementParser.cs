@@ -4,58 +4,94 @@ namespace TFlat.Compiler.Parser;
 
 internal static class StatementParser
 {
-    public static ParseResult<StatementParseNode>? Parse(Token[] tokens, int position)
+    public static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
-        var result = ParseFunctionCall(tokens, position);
-        if (result == null) return null;
+        var variableDeclarationAndAssignmentStatement = ParseVariableDeclarationAndAssignmentStatement(tokens, position);
+        if (variableDeclarationAndAssignmentStatement != null)
+            return ParseResultUtil.Generic(variableDeclarationAndAssignmentStatement);
 
-        var i = position + result.ConsumedTokens;
-        if(tokens[i].Type != TokenType.Semicolon) return null;
+        var functionCallStatement = ParseFunctionCallStatement(tokens, position);
+        if (functionCallStatement != null)
+            return ParseResultUtil.Generic(functionCallStatement);
 
-        return new ParseResult<StatementParseNode>(
-            new StatementParseNode(result.Node),
-            result.ConsumedTokens + 1
+        return null;
+    }
+
+    private static ParseResult<VariableDeclarationAndAssignmentStatementParseNode>? 
+        ParseVariableDeclarationAndAssignmentStatement(Token[] tokens, int position)
+    {
+        var i = position;
+
+        var variableDeclarationResult = ParseVariableDeclaration(tokens, i);
+        if (variableDeclarationResult == null) return null;
+        i += variableDeclarationResult.ConsumedTokens;
+
+        if (tokens[i].Type != TokenType.SingleEqual) return null;
+        i++;
+
+        var valueResult = ExpressionParser.Parse(tokens, i);
+        if(valueResult == null) return null;
+        i += valueResult.ConsumedTokens;
+
+        if (tokens[i].Type != TokenType.Semicolon) return null;
+        i++;
+
+        return new ParseResult<VariableDeclarationAndAssignmentStatementParseNode>(
+            new VariableDeclarationAndAssignmentStatementParseNode(
+                variableDeclarationResult.Node,
+                valueResult.Node
+            ),
+            i - position
         );
     }
 
-    private static ParseResult<FunctionCallParseNode>? ParseFunctionCall(Token[] tokens, int position)
+    internal static ParseResult<VariableDeclarationParseNode>? ParseVariableDeclaration(Token[] tokens, int position)
     {
-        if (tokens[position].Type != TokenType.Identifier)
+        var i = position;
+
+        if (tokens[i].Type != TokenType.ConstKeyword && tokens[i].Type != TokenType.LetKeyword)
             return null;
 
-        if (tokens[position + 1].Type != TokenType.OpenParen)
-            return null;
+        var isConst = tokens[i].Type == TokenType.ConstKeyword;
+        i++;
 
-        if (tokens[position + 2].Type == TokenType.CloseParen)
-        {
-            // Function call with no arguments
-            return new ParseResult<FunctionCallParseNode>(
-                new FunctionCallParseNode(tokens[position].Value, Array.Empty<ParseNode>()),
-                3
-            );
-        }
+        if (tokens[i].Type != TokenType.Identifier) return null;
+        var identifier = tokens[i].Value;
+        i++;
 
-        var argumentListResult = ParseArgumentList(tokens, position + 2);
-        if (argumentListResult == null) return null;
+        if (tokens[i].Type != TokenType.Colon) return null;
+        i++;
 
-        if (tokens[position + argumentListResult.ConsumedTokens + 2].Type != TokenType.CloseParen)
-            return null;
+        // TODO optional type annotations
+        var typeResult = TypeParser.Parse(tokens, i);
+        if (typeResult == null) return null;
+        i += typeResult.ConsumedTokens;
 
-        return new ParseResult<FunctionCallParseNode>(
-            new FunctionCallParseNode(tokens[position].Value, argumentListResult.Node),
-            3 + argumentListResult.ConsumedTokens
+        return new ParseResult<VariableDeclarationParseNode>(
+            new VariableDeclarationParseNode(
+                identifier,
+                isConst,
+                typeResult.Node
+            ),
+            i - position
         );
     }
 
-    private static ParseResult<ParseNode[]>? ParseArgumentList(Token[] tokens, int position)
+    private static ParseResult<FunctionCallStatementParseNode>? 
+        ParseFunctionCallStatement(Token[] tokens, int position)
     {
-        // TODO support 0 or 2+ arguments
-        var arg0Result = ExpressionParser.Parse(tokens, position);
-        if(arg0Result == null) return null;
+        var i = position;
 
-        return new ParseResult<ParseNode[]>(
-            new[] { arg0Result.Node },
-            arg0Result.ConsumedTokens
+        var functionCallResult = ExpressionParser.ParseFunctionCall(tokens, i);
+        if (functionCallResult == null) return null;
+        i += functionCallResult.ConsumedTokens;
+
+        if (tokens[i].Type != TokenType.Semicolon) return null;
+        i++;
+
+        return new ParseResult<FunctionCallStatementParseNode>(
+            new FunctionCallStatementParseNode(functionCallResult.Node),
+            i - position
         );
     }
 }

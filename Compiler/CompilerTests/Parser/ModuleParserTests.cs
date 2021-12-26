@@ -17,27 +17,27 @@ public class ModuleParserTests : ParserTest
     {
         var actual = Parse(CodeFixtures.HelloWorld);
 
-        var statement = new StatementParseNode(
-            new FunctionCallParseNode(
-                "print",
-                new[]
-                {
-                    new StringLiteralParseNode("hello world")
-                }
-            )
+        var main = new FunctionDeclarationParseNode(
+            "main",
+            Exported: false,
+            new[]
+            {
+                new FunctionCallStatementParseNode(
+                    new FunctionCallParseNode(
+                        "print",
+                        new[]
+                        {
+                            new StringLiteralParseNode("hello world")
+                        }
+                    )
+                )
+            }
         );
 
         var expected = new ModuleParseNode(
             new[]
             {
-                new FunctionDeclarationParseNode(
-                    "main",
-                    Exported: false,
-                    new []
-                    {
-                        statement
-                    }
-                )
+                main
             }
         );
 
