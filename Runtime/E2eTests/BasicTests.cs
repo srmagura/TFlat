@@ -1,4 +1,3 @@
-using System.Text;
 using TFlat.Compiler;
 using TFlat.Runtime;
 
@@ -24,15 +23,30 @@ public class BasicTests
 
         RuntimeProgram.RunAssembly(ast, executionOptions);
 
-        return standardOut.GetStringBuilder()
-            .Replace("\r\n", "\n")
-            .ToString();
+        var sb = standardOut.GetStringBuilder().Replace("\r\n", "\n");
+
+        Assert.AreEqual(sb[^1], '\n');
+        return sb.Remove(sb.Length - 1, 1).ToString();
     }
 
     [TestMethod]
     public async Task HelloWorld()
     {
         var output = await CompileAndRunAsync(CodeFixtures.HelloWorld);
-        Assert.AreEqual("hello world\n", output);
+        Assert.AreEqual("hello world", output);
+    }
+
+    [TestMethod]
+    public async Task MultipleFunctions()
+    {
+        var output = await CompileAndRunAsync(CodeFixtures.MultipleFunctions);
+        Assert.AreEqual("3\n.14159", output);
+    }
+
+    [TestMethod]
+    public async Task ConstVariable()
+    {
+        var output = await CompileAndRunAsync(CodeFixtures.ConstVariable);
+        Assert.AreEqual("apple", output);
     }
 }

@@ -28,7 +28,7 @@ public record StatementAstNode(FunctionCallAstNode FunctionCall)
 public record FunctionDeclarationAstNode(string Name, bool Exported, StatementAstNode[] Statements)
     : AstNode(AstNodeType.FunctionDeclaration);
 
-public record ModuleAstNode(FunctionDeclarationAstNode[] Functions)
+public record ModuleAstNode(FunctionDeclarationAstNode[] FunctionDeclarations)
     : AstNode(AstNodeType.Module);
 
 public static class AstNodeTypeMap

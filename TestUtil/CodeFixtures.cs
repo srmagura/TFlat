@@ -18,4 +18,11 @@ fun main(): void {
     print("".14159"");
 }
         ";
+
+    public const string ConstVariable = @"
+fun main(): void {
+    const a = ""apple"";
+    print(a);
+}
+        ";
 }

@@ -13,35 +13,45 @@ internal static class ModuleRunner
 
     internal static void Run(ModuleAstNode ast)
     {
+        var moduleScope = new Scope();
+
+        foreach (var f in ast.FunctionDeclarations)
+            moduleScope.Variables[f.Name] = f;
+
         // Main function does not have to be exported
-        var mainFunction = ast.Functions.FirstOrDefault(f => f.Name == "main");
-        if (mainFunction == null)
+        if (!moduleScope.Variables.TryGetValue("main", out var mainFunction))
             throw new Exception("Module did not contain a function named \"main\".");
 
-        RunDeclarationFunction(mainFunction);
+        var scopeStack = new ScopeStack(moduleScope);
+
+        RunFunction(mainFunction, scopeStack);
     }
 
-    private static void RunDeclarationFunction(FunctionDeclarationAstNode functionDeclaration)
+    private static void RunFunction(FunctionDeclarationAstNode functionDeclaration, ScopeStack scopeStack)
     {
-        foreach(var statement in functionDeclaration.Statements)
+        foreach (var statement in functionDeclaration.Statements)
         {
-            RunStatement(statement);
+            RunStatement(statement, scopeStack);
         }
     }
 
-    private static void RunStatement(StatementAstNode statement)
+    private static void RunStatement(StatementAstNode statement, ScopeStack scopeStack)
     {
-        RunFunctionCall(statement.FunctionCall);
+        RunFunctionCall(statement.FunctionCall, scopeStack);
     }
 
-    private static void RunFunctionCall(FunctionCallAstNode functionCall)
+    private static void RunFunctionCall(FunctionCallAstNode functionCall, ScopeStack scopeStack)
     {
         var functionName = functionCall.Function;
 
-        if (functionName != "print")
-            throw new Exception("Unrecognized function.");
+        if (functionName == "print")
+        {
+            Print(functionCall.Arguments);
+            return;
+        }
 
-        Print(functionCall.Arguments);
+        var function = scopeStack.ResolveVariable(functionName);
+        RunFunction(function, scopeStack.NewForTopLevelFunction());
     }
 
     private static void Print(AstNode[] arguments)
@@ -49,9 +59,16 @@ internal static class ModuleRunner
         if (arguments.Length != 1)
             throw new Exception("print expected exactly 1 argument.");
 
-        if (arguments[0] is not StringLiteralAstNode stringLiteral)
-            throw new Exception("The argument to print must be a string.");
-
-        _executionOptions.StandardOut.WriteLine(stringLiteral.Value);
+        switch (arguments[0])
+        {
+            case IntLiteralAstNode intLiteral:
+                _executionOptions.StandardOut.WriteLine(intLiteral.Value);
+                break;
+            case StringLiteralAstNode stringLiteral:
+                _executionOptions.StandardOut.WriteLine(stringLiteral.Value);
+                break;
+            default:
+                throw new Exception("print was called with an invalid argument.");
+        }
     }
 }
