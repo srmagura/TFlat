@@ -1,9 +1,8 @@
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
-using TFlat.Shared;
 
-namespace UnitTests.AST;
+namespace CompilerTests.AST;
 
 [TestClass]
 public class CodeToAstTests : AstTest
@@ -12,7 +11,7 @@ public class CodeToAstTests : AstTest
     {
         var tokens = TheLexer.Lex(code);
         var parseTree = ModuleParser.Parse(tokens);
-        return ParseTreeToAst.ConvertModule(parseTree);
+        return ModuleToAst.ConvertModule(parseTree);
     }
 
     private static FunctionCallStatementAstNode Print(AstNode argument)
@@ -100,7 +99,7 @@ public class CodeToAstTests : AstTest
             Statements: new AstNode[]
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
-                    "a", 
+                    "a",
                     Const: true,
                     new StringLiteralAstNode("apple")
                 ),
@@ -163,7 +162,7 @@ public class CodeToAstTests : AstTest
             Statements: new AstNode[]
             {
                 Print(new UnaryOperationAstNode(
-                    UnaryOperator.Negation, 
+                    UnaryOperator.Negation,
                     new IntLiteralAstNode(3)
                 )),
                 Print(new BinaryOperationAstNode(

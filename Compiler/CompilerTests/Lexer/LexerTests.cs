@@ -1,6 +1,6 @@
 using TFlat.Compiler.Lexer;
 
-namespace UnitTests.Lexer;
+namespace CompilerTests.Lexer;
 
 [TestClass]
 public class LexerTests

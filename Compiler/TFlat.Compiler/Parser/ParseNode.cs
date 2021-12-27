@@ -18,10 +18,38 @@ internal record StringLiteralParseNode(string Value)
 
 // Expressions
 
-internal record PostExpressionParseNode(BinaryOperator Operator, IntLiteralParseNode IntLiteral, ParseNode? PostExpression)
+internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
     : ParseNode();
 
-internal record PreExpressionParseNode(IntLiteralParseNode IntLiteral, ParseNode EPrime)
+/*
+ * 
+ * The production rules for operations like addition and multiplication have to be 
+ * transformed to remove left recursion. That's why they are split up into "pre"
+ * and "post" nodes. See https://www.csd.uwo.ca/~mmorenom/CS447/Lectures/Syntax.html/node8.html.
+ *
+ * Example
+ * -------
+ *
+ * BEFORE:
+ * 
+ *    Expression => Expression + Int | Int
+ *    
+ * AFTER:
+ * 
+ *    Expression => Int Expression'
+ *    Expression' => + Int Expression' | empty
+ */
+
+internal record PostMultiplicationParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
+    : ParseNode();
+
+internal record PreMultiplicationParseNode(ParseNode Operand, ParseNode Post)
+    : ParseNode();
+
+internal record PostAdditionParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
+    : ParseNode();
+
+internal record PreAdditionParseNode(ParseNode Operand, ParseNode Post)
     : ParseNode();
 
 internal record IdentifierExpressionParseNode(string Identifier)
@@ -33,11 +61,6 @@ internal record ArgumentListParseNode(ParseNode[] Arguments)
 internal record FunctionCallParseNode(string Function, ArgumentListParseNode ArgumentList)
     : ParseNode();
 
-internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
-    : ParseNode();
-
-internal record BinaryOperationParseNode(BinaryOperator Operator, ParseNode Operand0, ParseNode Operand1)
-    : ParseNode();
 
 // Type annotations
 

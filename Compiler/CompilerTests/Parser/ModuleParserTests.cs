@@ -1,10 +1,10 @@
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
 
-namespace UnitTests.Parser;
+namespace CompilerTests.Parser;
 
 [TestClass]
-public class ModuleParserTests : ParserTest
+public class ModuleParserTests : ParserTestOLD
 {
     private static ModuleParseNode Parse(string code)
     {

@@ -1,46 +1,23 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
 
-namespace UnitTests.Parser;
+namespace CompilerTests.Parser;
 
-public abstract class ParserTest
+public abstract class ParserTest : AstTest
 {
-    internal class ParseNodeWriteConverter : JsonConverter<ParseNode>
+    internal static void TestParseCore<T>(Func<Token[], int, ParseResult<T>?> parseFunc, string code, AstNode expected)
+        where T : ParseNode
     {
-        public override ParseNode? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            throw new NotSupportedException();
-        }
+        var tokens = TheLexer.Lex(code);
+        var parseResult = parseFunc(tokens, 0);
+        Assert.IsNotNull(parseResult);
+        Assert.AreEqual(
+            tokens.Length,
+            parseResult.ConsumedTokens,
+            "It did not consume the expected number of tokens."
+        );
 
-        public override void Write(Utf8JsonWriter writer, ParseNode value, JsonSerializerOptions options)
-        {
-            writer.WriteStartObject();
-
-            // Write the runtime type name to the JSON
-            writer.WriteString("Type", value.GetType().Name);
-            writer.WritePropertyName("Node");
-            
-            // typeof(object) makes it serialize the properties of the runtime type,
-            // not the declared type
-            JsonSerializer.Serialize(writer, value, typeof(object), options);
-
-            writer.WriteEndObject();
-        }
-    }
-
-    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { 
-        Converters = { new ParseNodeWriteConverter() },
-        WriteIndented = true 
-    };
-
-    internal static string SerializeParseTree(ParseNode node)
-    {
-        return JsonSerializer.Serialize(node, JsonSerializerOptions);
-    }
-
-    internal static void AssertParseTreesEqual(ParseNode expected, ParseNode actual)
-    {
-        Assert.AreEqual(SerializeParseTree(expected), SerializeParseTree(actual));
+        var actual = ExpressionToAst.Convert(parseResult.Node);
+        AssertAstsEqual(expected, actual);
     }
 }

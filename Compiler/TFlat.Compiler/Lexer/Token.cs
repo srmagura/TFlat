@@ -19,6 +19,10 @@ internal enum TokenType
     StringKeyword,
     BoolKeyword,
 
+    NullKeyword,
+    FalseKeyword,
+    TrueKeyword,
+
     // Separators
     Semicolon,
     Colon,

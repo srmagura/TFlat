@@ -18,7 +18,7 @@ public static class CompilerProgram
     {
         var tokens = TheLexer.Lex(code);
         var parseTree = ModuleParser.Parse(tokens);
-        var ast = ParseTreeToAst.ConvertModule(parseTree);
+        var ast = ModuleToAst.ConvertModule(parseTree);
         
         await AstSerializer.SerializeAsync(ast, dllStream);
     }

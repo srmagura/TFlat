@@ -1,10 +1,8 @@
-using System.Text.Json;
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
-using TFlat.Shared;
 
-namespace UnitTests.AST;
+namespace CompilerTests.AST;
 
 [TestClass]
 public class SerializeAstTests : AstTest
@@ -14,7 +12,7 @@ public class SerializeAstTests : AstTest
     {
         var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
         var parseTree = ModuleParser.Parse(tokens);
-        var expectedAst = ParseTreeToAst.ConvertModule(parseTree);
+        var expectedAst = ModuleToAst.ConvertModule(parseTree);
 
         using var memoryStream = new MemoryStream();
         await AstSerializer.SerializeAsync(expectedAst, memoryStream);

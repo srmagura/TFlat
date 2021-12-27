@@ -1,5 +1,3 @@
-using TFlat.Shared;
-
 namespace TFlat.Runtime.Instances;
 
 internal class TfFunction : TfObject

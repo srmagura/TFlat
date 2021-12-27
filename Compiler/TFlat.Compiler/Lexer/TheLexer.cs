@@ -101,6 +101,10 @@ internal static class TheLexer
             "string" => new SimpleToken(TokenType.StringKeyword, keyword),
             "bool" => new SimpleToken(TokenType.BoolKeyword, keyword),
 
+            "null" => new SimpleToken(TokenType.NullKeyword, keyword),
+            "false" => new SimpleToken(TokenType.FalseKeyword, keyword),
+            "true" => new SimpleToken(TokenType.TrueKeyword, keyword),
+
             _ => null
         };
     }
