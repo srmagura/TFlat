@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
 
@@ -7,7 +6,6 @@ namespace UnitTests.Parser;
 [TestClass]
 public class ExpressionParserTests : ParserTest
 {
-   
     private static void TestExpressionParse(string code, ParseNode expected)
     {
         var tokens = TheLexer.Lex(code);

@@ -13,4 +13,6 @@ internal static class ParseResultUtil
     {
         return new ParseResult<ParseNode>(result.Node, result.ConsumedTokens);
     }
+
+    internal static readonly ParseResult<ParseNode> Empty = new(new EmptyParseNode(), 0);
 }

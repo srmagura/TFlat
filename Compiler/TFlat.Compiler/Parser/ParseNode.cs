@@ -4,6 +4,9 @@ namespace TFlat.Compiler.Parser;
 
 internal abstract record ParseNode();
 
+internal record EmptyParseNode()
+    : ParseNode();
+
 // Literals
 
 internal record BoolLiteralParseNode(bool Value)
@@ -16,6 +19,12 @@ internal record StringLiteralParseNode(string Value)
     : ParseNode();
 
 // Expressions
+
+internal record PostExpressionParseNode(BinaryOperator Operator, IntLiteralParseNode IntLiteral, ParseNode EPrimeOrEmpty)
+    : ParseNode();
+
+internal record PreExpressionParseNode(IntLiteralParseNode IntLiteral, ParseNode EPrime)
+    : ParseNode();
 
 internal record IdentifierExpressionParseNode(string Identifier)
     : ParseNode();
