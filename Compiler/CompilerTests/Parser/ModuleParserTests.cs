@@ -25,10 +25,12 @@ public class ModuleParserTests : ParserTest
                 new FunctionCallStatementParseNode(
                     new FunctionCallParseNode(
                         "print",
-                        new[]
-                        {
-                            new StringLiteralParseNode("hello world")
-                        }
+                        new ArgumentListParseNode(
+                            new[]
+                            {
+                                new StringLiteralParseNode("hello world")
+                            }
+                        )
                     )
                 )
             }

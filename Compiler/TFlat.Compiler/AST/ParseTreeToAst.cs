@@ -63,7 +63,7 @@ internal static class ParseTreeToAst
 
     private static FunctionCallAstNode ConvertFunctionCall(FunctionCallParseNode parseNode)
     {
-        var arguments = parseNode.Arguments
+        var arguments = parseNode.ArgumentList.Arguments
             .Select(ConvertExpression)
             .ToArray();
 

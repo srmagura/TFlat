@@ -24,7 +24,7 @@ public class StatementParserTests : ParserTest
         var expected = new FunctionCallStatementParseNode(
             new FunctionCallParseNode(
                 "f",
-                Array.Empty<ParseNode>()
+                new ArgumentListParseNode(Array.Empty<ParseNode>())
             )
         );
 
@@ -39,10 +39,12 @@ public class StatementParserTests : ParserTest
         var expected = new FunctionCallStatementParseNode(
             new FunctionCallParseNode(
                 "print",
-                new[]
-                {
-                    new IntLiteralParseNode(3)
-                }
+                new ArgumentListParseNode(
+                    new[]
+                    {
+                        new IntLiteralParseNode(3)
+                    }
+                )
             )
         );
 
@@ -57,10 +59,12 @@ public class StatementParserTests : ParserTest
         var expected = new FunctionCallStatementParseNode(
             new FunctionCallParseNode(
                 "print",
-                new[]
-                {
-                    new StringLiteralParseNode("hello world")
-                }
+                new ArgumentListParseNode(
+                    new[]
+                    {
+                        new StringLiteralParseNode("hello world")
+                    }
+                )
             )
         );
 
@@ -139,10 +143,12 @@ public class StatementParserTests : ParserTest
         var expected = new FunctionCallStatementParseNode(
             new FunctionCallParseNode(
                 "print",
-                new[]
-                {
-                    new IdentifierExpressionParseNode("a")
-                }
+                new ArgumentListParseNode(
+                    new[]
+                    {
+                        new IdentifierExpressionParseNode("a")
+                    }
+                )
             )
         );
 
