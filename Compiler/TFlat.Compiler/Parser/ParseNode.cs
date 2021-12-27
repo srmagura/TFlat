@@ -46,13 +46,13 @@ internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operan
 internal record PostMultiplicationParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
     : ParseNode();
 
-internal record PreMultiplicationParseNode(ParseNode Operand, ParseNode Post)
+internal record MultiplicationParseNode(ParseNode Operand, ParseNode Post)
     : ParseNode();
 
-internal record PostAdditionParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
+internal record PostAdditionParseNode(BinaryOperator Operator, MultiplicationParseNode Operand, ParseNode Post)
     : ParseNode();
 
-internal record PreAdditionParseNode(ParseNode Operand, ParseNode Post)
+internal record AdditionParseNode(MultiplicationParseNode Operand, ParseNode Post)
     : ParseNode();
 
 internal record ArgumentListParseNode(ParseNode[] Arguments)

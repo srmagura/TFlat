@@ -59,11 +59,11 @@ internal static class TheLexer
         {
             if (ConsumeWhitespace()) continue;
 
+            if (TryLex(LexIntLiteral)) continue;
+            if (TryLex(LexStringLiteral)) continue;
             if (TryLex(LexKeyword)) continue;
             if (TryLex(LexOperator)) continue;
             if (TryLex(LexIdentifier)) continue;
-            if (TryLex(LexIntLiteral)) continue;
-            if (TryLex(LexStringLiteral)) continue;
             if (TryLex(LexSeparator)) continue;
 
             throw new Exception("Failed to identify the next token.");
@@ -159,7 +159,7 @@ internal static class TheLexer
     {
         var sb = new StringBuilder();
 
-        for (var i = position; i < s.Length; i++)
+        for(var i = position; i < s.Length; i++)
         {
             if (!char.IsDigit(s[i])) break;
 
@@ -201,8 +201,8 @@ internal static class TheLexer
         {
             ';' => new SimpleToken(TokenType.Semicolon, s[position].ToString()),
             ':' => new SimpleToken(TokenType.Colon, s[position].ToString()),
-            '(' => new SimpleToken(TokenType.OpenParen, s[position].ToString()),
-            ')' => new SimpleToken(TokenType.CloseParen, s[position].ToString()),
+            '(' => new SimpleToken(TokenType.OpenParenthesis, s[position].ToString()),
+            ')' => new SimpleToken(TokenType.CloseParenthesis, s[position].ToString()),
             '{' => new SimpleToken(TokenType.OpenCurlyBrace, s[position].ToString()),
             '}' => new SimpleToken(TokenType.CloseCurlyBrace, s[position].ToString()),
             _ => null

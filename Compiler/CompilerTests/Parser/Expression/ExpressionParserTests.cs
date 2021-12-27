@@ -7,7 +7,20 @@ public class ExpressionParserTests : ParserTest
 {
     private static void TestParse(string code, AstNode expected)
     {
-        TestParseCore(ExpressionParser.Parse, ExpressionToAst.Convert, code, expected);
+        // TODO will change from AdditionParser to ExpressionParser in the future
+        TestParseCore(AdditionParser.Parse, ExpressionToAst.Convert, code, expected);
+    }
+
+    private static void TestDoesNotParse(string code)
+    {
+        // TODO will change from AdditionParser to ExpressionParser in the future
+        TestDoesNotParseCore(AdditionParser.Parse, code);
+    }
+
+    [TestMethod]
+    public void Empty()
+    {
+        TestDoesNotParse("");
     }
 
     [TestMethod]
@@ -35,5 +48,34 @@ public class ExpressionParserTests : ParserTest
         );
 
         TestParse("1+2/3", expected);
+    }
+
+    [TestMethod]
+    public void Parentheses()
+    {
+        var expected = new BinaryOperationAstNode(
+            BinaryOperator.Addition,
+            new IntLiteralAstNode(1),
+            new IntLiteralAstNode(7)
+        );
+
+        TestParse("((1 + (7)))", expected);
+    }
+
+    [TestMethod]
+    public void Negation()
+    {
+        var add17 = new BinaryOperationAstNode(
+            BinaryOperator.Addition,
+            new IntLiteralAstNode(1),
+            new IntLiteralAstNode(7)
+        );
+
+        var expected = new UnaryOperationAstNode(
+            UnaryOperator.Negation,
+            add17
+        );
+
+        TestParse("-(1+7)", expected);
     }
 }

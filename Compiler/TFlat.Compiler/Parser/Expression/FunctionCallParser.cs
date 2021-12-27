@@ -2,30 +2,19 @@ using TFlat.Compiler.Lexer;
 
 namespace TFlat.Compiler.Parser.Expression;
 
-internal static class ExpressionParser
+internal static class FunctionCallParser
 {
-    public static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
-    {
-        var addition = AdditionParser.Parse(tokens, position);
-        if(addition != null)
-            return ParseResultUtil.Generic(addition);
-
-        
-
-        return null;
-    }
-
-    internal static ParseResult<FunctionCallParseNode>? ParseFunctionCall(Token[] tokens, int position)
+    internal static ParseResult<FunctionCallParseNode>? Parse(Token[] tokens, int position)
     {
         var i = position;
 
         if (tokens[i].Type != TokenType.Identifier) return null;
         i++;
 
-        if (tokens[i].Type != TokenType.OpenParen) return null;
+        if (tokens[i].Type != TokenType.OpenParenthesis) return null;
         i++;
 
-        if (tokens[i].Type == TokenType.CloseParen)
+        if (tokens[i].Type == TokenType.CloseParenthesis)
         {
             // Function call with no arguments
             var argumentList = new ArgumentListParseNode(Array.Empty<ParseNode>());
@@ -40,7 +29,7 @@ internal static class ExpressionParser
         if (argumentListResult == null) return null;
         i += argumentListResult.ConsumedTokens;
 
-        if (tokens[i].Type != TokenType.CloseParen) return null;
+        if (tokens[i].Type != TokenType.CloseParenthesis) return null;
         i++;
 
         return new ParseResult<FunctionCallParseNode>(

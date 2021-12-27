@@ -1,13 +1,13 @@
 using TFlat.Compiler.Lexer;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Expression;
 
 internal static class TerminalParser
 {
     internal static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
         var identifierExpression = ParseIdentifierExpression(tokens, position);
-        if(identifierExpression != null)
+        if (identifierExpression != null)
             return ParseResultUtil.Generic(identifierExpression);
 
         var intLiteral = ParseIntLiteral(tokens, position);
@@ -27,7 +27,7 @@ internal static class TerminalParser
 
     private static ParseResult<IntLiteralParseNode>? ParseIntLiteral(Token[] tokens, int position)
     {
-        if(position >= tokens.Length) return null;
+        if (position >= tokens.Length) return null;
 
         if (tokens[position].Type != TokenType.IntLiteral)
             return null;
@@ -42,6 +42,8 @@ internal static class TerminalParser
 
     private static ParseResult<StringLiteralParseNode>? ParseStringLiteral(Token[] tokens, int position)
     {
+        if (position >= tokens.Length) return null;
+
         if (tokens[position].Type != TokenType.StringLiteral)
             return null;
 
@@ -56,6 +58,8 @@ internal static class TerminalParser
 
     private static ParseResult<BoolLiteralParseNode>? ParseBoolLiteral(Token[] tokens, int position)
     {
+        if (position >= tokens.Length) return null;
+
         return tokens[position].Type switch
         {
             TokenType.FalseKeyword => new ParseResult<BoolLiteralParseNode>(new BoolLiteralParseNode(false), 1),
@@ -66,6 +70,8 @@ internal static class TerminalParser
 
     private static ParseResult<IdentifierExpressionParseNode>? ParseIdentifierExpression(Token[] tokens, int position)
     {
+        if (position >= tokens.Length) return null;
+
         if (tokens[position].Type != TokenType.Identifier)
             return null;
 

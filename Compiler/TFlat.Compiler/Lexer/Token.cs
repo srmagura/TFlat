@@ -26,8 +26,8 @@ internal enum TokenType
     // Separators
     Semicolon,
     Colon,
-    OpenParen,
-    CloseParen,
+    OpenParenthesis,
+    CloseParenthesis,
     OpenCurlyBrace,
     CloseCurlyBrace,
 

@@ -1,10 +1,10 @@
 using TFlat.Compiler.Lexer;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Expression;
 
 internal static class AdditionParser
 {
-    internal static ParseResult<PreAdditionParseNode>? Parse(Token[] tokens, int position)
+    internal static ParseResult<AdditionParseNode>? Parse(Token[] tokens, int position)
     {
         var i = position;
 
@@ -16,8 +16,8 @@ internal static class AdditionParser
         if (postResult == null) return null;
         i += postResult.ConsumedTokens;
 
-        return new ParseResult<PreAdditionParseNode>(
-            new PreAdditionParseNode(operandResult.Node, postResult.Node),
+        return new ParseResult<AdditionParseNode>(
+            new AdditionParseNode(operandResult.Node, postResult.Node),
             i - position
         );
     }
@@ -33,7 +33,7 @@ internal static class AdditionParser
 
     private static ParseResult<PostAdditionParseNode>? ParsePostAdditionCore(Token[] tokens, int position)
     {
-        if(position >= tokens.Length) return null;
+        if (position >= tokens.Length) return null;
 
         var i = position;
 

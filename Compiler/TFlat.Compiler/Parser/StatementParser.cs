@@ -56,7 +56,7 @@ internal static class StatementParser
         if (tokens[i].Type != TokenType.SingleEqual) return null;
         i++;
 
-        var valueResult = ExpressionParser.Parse(tokens, i);
+        var valueResult = FunctionCallParser.Parse(tokens, i);
         if(valueResult == null) return null;
         i += valueResult.ConsumedTokens;
 
@@ -84,7 +84,7 @@ internal static class StatementParser
         if (tokens[i].Type != TokenType.SingleEqual) return null;
         i++;
 
-        var valueResult = ExpressionParser.Parse(tokens, i);
+        var valueResult = FunctionCallParser.Parse(tokens, i);
         if (valueResult == null) return null;
         i += valueResult.ConsumedTokens;
 
@@ -137,7 +137,7 @@ internal static class StatementParser
     {
         var i = position;
 
-        var functionCallResult = ExpressionParser.ParseFunctionCall(tokens, i);
+        var functionCallResult = FunctionCallParser.Parse(tokens, i);
         if (functionCallResult == null) return null;
         i += functionCallResult.ConsumedTokens;
 

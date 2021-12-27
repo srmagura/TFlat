@@ -5,6 +5,17 @@ namespace CompilerTests.Parser;
 
 public abstract class ParserTest : AstTest
 {
+    internal static void TestDoesNotParseCore<T>(
+        Func<Token[], int, ParseResult<T>?> parse,
+        string code
+    )
+        where T : ParseNode
+    {
+        var tokens = TheLexer.Lex(code);
+        var parseResult = parse(tokens, 0);
+        Assert.IsNull(parseResult, "The parse result was non-null.");
+    }
+
     internal static void TestParseCore<T>(
         Func<Token[], int, ParseResult<T>?> parse,
         Func<ParseNode, AstNode> convertToAst,

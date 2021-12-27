@@ -1,14 +1,14 @@
 using TFlat.Compiler.Lexer;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Expression;
 
 internal static class MultiplicationParser
 {
-    internal static ParseResult<PreMultiplicationParseNode>? Parse(Token[] tokens, int position)
+    internal static ParseResult<MultiplicationParseNode>? Parse(Token[] tokens, int position)
     {
         var i = position;
 
-        var operand0Result = TerminalParser.Parse(tokens, i);
+        var operand0Result = ParenthesizedExpressionParser.Parse(tokens, i);
         if (operand0Result == null) return null;
         i += operand0Result.ConsumedTokens;
 
@@ -16,8 +16,8 @@ internal static class MultiplicationParser
         if (postResult == null) return null;
         i += postResult.ConsumedTokens;
 
-        return new ParseResult<PreMultiplicationParseNode>(
-            new PreMultiplicationParseNode(operand0Result.Node, postResult.Node),
+        return new ParseResult<MultiplicationParseNode>(
+            new MultiplicationParseNode(operand0Result.Node, postResult.Node),
             i - position
         );
     }
@@ -33,7 +33,7 @@ internal static class MultiplicationParser
 
     private static ParseResult<PostMultiplicationParseNode>? ParsePostMultiplicationCore(Token[] tokens, int position)
     {
-        if(position >= tokens.Length) return null;
+        if (position >= tokens.Length) return null;
 
         var i = position;
 
@@ -48,7 +48,7 @@ internal static class MultiplicationParser
         if (binaryOperator == null) return null;
         i++;
 
-        var literalResult = TerminalParser.Parse(tokens, i);
+        var literalResult = ParenthesizedExpressionParser.Parse(tokens, i);
         if (literalResult == null) return null;
         i += literalResult.ConsumedTokens;
 

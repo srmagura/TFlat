@@ -14,8 +14,8 @@ internal static class ExpressionToAst
 
             // UnaryOperationParseNode unaryOperation => ConvertUnaryOperation(unaryOperation),
 
-            PreAdditionParseNode preAddition => ConvertPreAddition(preAddition),
-            PreMultiplicationParseNode preMultiplication => ConvertPreMultiplication(preMultiplication),
+            AdditionParseNode preAddition => ConvertPreAddition(preAddition),
+            MultiplicationParseNode preMultiplication => ConvertPreMultiplication(preMultiplication),
 
             IdentifierExpressionParseNode identifierExpression => ConvertIdentifierExpression(identifierExpression),
 
@@ -32,7 +32,7 @@ internal static class ExpressionToAst
         return new FunctionCallAstNode(parseNode.Function, arguments);
     }
 
-    private static AstNode ConvertPreAddition(PreAdditionParseNode parseNode)
+    private static AstNode ConvertPreAddition(AdditionParseNode parseNode)
     {
         var operand0 = Convert(parseNode.Operand);
 
@@ -46,7 +46,7 @@ internal static class ExpressionToAst
         }
         else
         {
-            var property = $"{nameof(PreAdditionParseNode)}.{nameof(PreAdditionParseNode.Post)}";
+            var property = $"{nameof(AdditionParseNode)}.{nameof(AdditionParseNode.Post)}";
             throw new Exception($"{property} was ${parseNode.Post.GetType().Name} which is not allowed.");
         }
     }
@@ -71,7 +71,7 @@ internal static class ExpressionToAst
         }
     }
 
-    private static AstNode ConvertPreMultiplication(PreMultiplicationParseNode parseNode)
+    private static AstNode ConvertPreMultiplication(MultiplicationParseNode parseNode)
     {
         var operand0 = Convert(parseNode.Operand);
 
@@ -85,7 +85,7 @@ internal static class ExpressionToAst
         }
         else
         {
-            var property = $"{nameof(PreMultiplicationParseNode)}.{nameof(PreMultiplicationParseNode.Post)}";
+            var property = $"{nameof(MultiplicationParseNode)}.{nameof(MultiplicationParseNode.Post)}";
             throw new Exception($"{property} was ${parseNode.Post.GetType().Name} which is not allowed.");
         }
     }

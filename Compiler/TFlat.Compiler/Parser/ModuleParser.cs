@@ -52,10 +52,10 @@ internal class ModuleParser
         var name = tokens[i].Value;
         i++;
 
-        if (tokens[i].Type != TokenType.OpenParen) return null;
+        if (tokens[i].Type != TokenType.OpenParenthesis) return null;
         i++;
 
-        if (tokens[i].Type != TokenType.CloseParen) return null;
+        if (tokens[i].Type != TokenType.CloseParenthesis) return null;
         i++;
 
         if (tokens[i].Type != TokenType.Colon) return null;

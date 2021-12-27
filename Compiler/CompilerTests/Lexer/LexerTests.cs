@@ -47,6 +47,8 @@ public class LexerTests
 
         token = TheLexer.Lex("34").Single();
         Assert.AreEqual(new Token(TokenType.IntLiteral, "34", 1, 1), token);
+
+        Assert.AreEqual(2, TheLexer.Lex("-0").Length);
     }
 
     [TestMethod]
@@ -73,10 +75,10 @@ public class LexerTests
     public void Separators()
     {
         var token = TheLexer.Lex("(").Single();
-        Assert.AreEqual(new Token(TokenType.OpenParen, "(", 1, 1), token);
+        Assert.AreEqual(new Token(TokenType.OpenParenthesis, "(", 1, 1), token);
 
         token = TheLexer.Lex(")").Single();
-        Assert.AreEqual(new Token(TokenType.CloseParen, ")", 1, 1), token);
+        Assert.AreEqual(new Token(TokenType.CloseParenthesis, ")", 1, 1), token);
 
         token = TheLexer.Lex("{").Single();
         Assert.AreEqual(new Token(TokenType.OpenCurlyBrace, "{", 1, 1), token);
@@ -138,9 +140,9 @@ public class LexerTests
         var expected = new List<SimpleToken>
         {
             new SimpleToken(TokenType.Identifier, "print"),
-            new SimpleToken(TokenType.OpenParen, "("),
+            new SimpleToken(TokenType.OpenParenthesis, "("),
             new SimpleToken(TokenType.IntLiteral, "3"),
-            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.CloseParenthesis, ")"),
             new SimpleToken(TokenType.Semicolon, ";"),
         };
 
@@ -179,15 +181,15 @@ public class LexerTests
         {
             new SimpleToken(TokenType.FunKeyword, "fun"),
             new SimpleToken(TokenType.Identifier, "main"),
-            new SimpleToken(TokenType.OpenParen, "("),
-            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.OpenParenthesis, "("),
+            new SimpleToken(TokenType.CloseParenthesis, ")"),
             new SimpleToken(TokenType.Colon, ":"),
             new SimpleToken(TokenType.VoidKeyword, "void"),
             new SimpleToken(TokenType.OpenCurlyBrace, "{"),
             new SimpleToken(TokenType.Identifier, "print"),
-            new SimpleToken(TokenType.OpenParen, "("),
+            new SimpleToken(TokenType.OpenParenthesis, "("),
             new SimpleToken(TokenType.StringLiteral, "\"hello world\""),
-            new SimpleToken(TokenType.CloseParen, ")"),
+            new SimpleToken(TokenType.CloseParenthesis, ")"),
             new SimpleToken(TokenType.Semicolon, ";"),
             new SimpleToken(TokenType.CloseCurlyBrace, "}"),
         };

@@ -1,6 +1,6 @@
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser;
+using TFlat.Compiler.Parser.Expression;
 
 namespace CompilerTests.Parser.Expression;
 
