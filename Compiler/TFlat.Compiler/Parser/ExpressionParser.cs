@@ -43,8 +43,10 @@ internal static class ExpressionParser
         if (tokens[i].Type == TokenType.CloseParen)
         {
             // Function call with no arguments
+            var argumentList = new ArgumentListParseNode(Array.Empty<ParseNode>());
+
             return new ParseResult<FunctionCallParseNode>(
-                new FunctionCallParseNode(tokens[position].Value, Array.Empty<ParseNode>()),
+                new FunctionCallParseNode(tokens[position].Value, argumentList),
                 3
             );
         }
@@ -62,14 +64,14 @@ internal static class ExpressionParser
         );
     }
 
-    private static ParseResult<ParseNode[]>? ParseArgumentList(Token[] tokens, int position)
+    private static ParseResult<ArgumentListParseNode>? ParseArgumentList(Token[] tokens, int position)
     {
         // TODO support 0 or 2+ arguments
         var arg0Result = Parse(tokens, position);
         if (arg0Result == null) return null;
 
-        return new ParseResult<ParseNode[]>(
-            new[] { arg0Result.Node },
+        return new ParseResult<ArgumentListParseNode>(
+            new ArgumentListParseNode(new[] { arg0Result.Node }),
             arg0Result.ConsumedTokens
         );
     }

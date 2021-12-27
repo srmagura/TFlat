@@ -26,38 +26,47 @@ public class AdditionParserTests : ParserTest
     public void OneAddition()
     {
         var post = new PostExpressionParseNode(BinaryOperator.Addition, new IntLiteralParseNode(2), new EmptyParseNode());
-        var pre = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
+        var expected = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
 
-        TestParse("1+2", pre);
+        TestParse("1+2", expected);
     }
 
     [TestMethod]
     public void OneSubtraction()
     {
-        TestParse("1-2", new BinaryOperationParseNode(BinaryOperator.Subtraction, new IntLiteralParseNode(1), new IntLiteralParseNode(2)));
+        var post = new PostExpressionParseNode(BinaryOperator.Subtraction, new IntLiteralParseNode(2), new EmptyParseNode());
+        var expected = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
+
+        TestParse("1-2", expected);
     }
 
     [TestMethod]
     public void TwoAdditions()
     {
-        var t1 = new BinaryOperationParseNode(BinaryOperator.Addition, new IntLiteralParseNode(1), new IntLiteralParseNode(2));
-        var t2 = new BinaryOperationParseNode(BinaryOperator.Addition, t1, new IntLiteralParseNode(3));
-        TestParse("1+2+3", t2);
+        var post2 = new PostExpressionParseNode(BinaryOperator.Addition, new IntLiteralParseNode(3), new EmptyParseNode());
+        var post = new PostExpressionParseNode(BinaryOperator.Addition, new IntLiteralParseNode(2), post2);
+        var expected = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
+    
+        TestParse("1+2+3", expected);
     }
 
     [TestMethod]
     public void AddThenSubtract()
     {
-        var t1 = new BinaryOperationParseNode(BinaryOperator.Addition, new IntLiteralParseNode(1), new IntLiteralParseNode(2));
-        var t2 = new BinaryOperationParseNode(BinaryOperator.Subtraction, t1, new IntLiteralParseNode(3));
-        TestParse("1+2-3", t2);
+        var post2 = new PostExpressionParseNode(BinaryOperator.Subtraction, new IntLiteralParseNode(3), new EmptyParseNode());
+        var post = new PostExpressionParseNode(BinaryOperator.Addition, new IntLiteralParseNode(2), post2);
+        var expected = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
+
+        TestParse("1+2-3", expected);
     }
 
     [TestMethod]
     public void SubtractThenAdd()
     {
-        var t1 = new BinaryOperationParseNode(BinaryOperator.Subtraction, new IntLiteralParseNode(1), new IntLiteralParseNode(2));
-        var t2 = new BinaryOperationParseNode(BinaryOperator.Addition, t1, new IntLiteralParseNode(3));
-        TestParse("1-2+3", t2);
+        var post2 = new PostExpressionParseNode(BinaryOperator.Addition, new IntLiteralParseNode(3), new EmptyParseNode());
+        var post = new PostExpressionParseNode(BinaryOperator.Subtraction, new IntLiteralParseNode(2), post2);
+        var expected = new PreExpressionParseNode(new IntLiteralParseNode(1), post);
+
+        TestParse("1-2+3", expected);
     }
 }

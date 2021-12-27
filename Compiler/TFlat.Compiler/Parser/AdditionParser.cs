@@ -28,16 +28,6 @@ internal static class AdditionParser
         return null;
     }
 
-    private static readonly Dictionary<TokenType, BinaryOperator> TokenTypeToBinaryOperatorMap = new()
-    {
-        [TokenType.Plus] = BinaryOperator.Addition,
-        [TokenType.Minus] = BinaryOperator.Subtraction,
-        //[TokenType.Asterisk] = BinaryOperator.Multiplication,
-        //[TokenType.DoubleAsterisk] = BinaryOperator.Exponentiation,
-        //[TokenType.Slash] = BinaryOperator.Division,
-        //[TokenType.DoubleBackslash] = BinaryOperator.IntegerDivision,
-    };
-
     private static ParseResult<PreExpressionParseNode>? ParsePreExpression(Token[] tokens, int position)
     {
         var i = position;
@@ -58,9 +48,9 @@ internal static class AdditionParser
 
     private static ParseResult<ParseNode>? ParsePostExpression(Token[] tokens, int position)
     {
-        var result0 = ParsePostExpressionCore(tokens, position);
-        if (result0 != null)
-            return ParseResultUtil.Generic(result0);
+        var result = ParsePostExpressionCore(tokens, position);
+        if (result != null)
+            return ParseResultUtil.Generic(result);
 
         return ParseResultUtil.Empty;
     }
@@ -71,19 +61,26 @@ internal static class AdditionParser
 
         var i = position;
 
-        if (tokens[i].Type != TokenType.Plus) return null;
+        BinaryOperator? binaryOperator = tokens[i].Type switch
+        {
+            TokenType.Plus => BinaryOperator.Addition,
+            TokenType.Minus => BinaryOperator.Subtraction,
+            _ => null
+        };
+
+        if (binaryOperator == null) return null;
         i++;
 
         var intLiteralResult = ParseIntLiteral(tokens, i);
         if (intLiteralResult == null) return null;
         i += intLiteralResult.ConsumedTokens;
 
-        var ePrimeResult = ParsePostExpression(tokens, i);
-        if (ePrimeResult == null) return null;
-        i += ePrimeResult.ConsumedTokens;
+        var postExpressionResult = ParsePostExpression(tokens, i);
+        if (postExpressionResult == null) return null;
+        i += postExpressionResult.ConsumedTokens;
 
         return new ParseResult<PostExpressionParseNode>(
-            new PostExpressionParseNode(BinaryOperator.Addition, intLiteralResult.Node, ePrimeResult.Node),
+            new PostExpressionParseNode(binaryOperator.Value, intLiteralResult.Node, postExpressionResult.Node),
             i - position
         );
     }

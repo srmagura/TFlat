@@ -1,5 +1,3 @@
-using TFlat.Shared;
-
 namespace TFlat.Compiler.Parser;
 
 internal abstract record ParseNode();
@@ -20,7 +18,7 @@ internal record StringLiteralParseNode(string Value)
 
 // Expressions
 
-internal record PostExpressionParseNode(BinaryOperator Operator, IntLiteralParseNode IntLiteral, ParseNode EPrimeOrEmpty)
+internal record PostExpressionParseNode(BinaryOperator Operator, IntLiteralParseNode IntLiteral, ParseNode? PostExpression)
     : ParseNode();
 
 internal record PreExpressionParseNode(IntLiteralParseNode IntLiteral, ParseNode EPrime)
@@ -29,7 +27,10 @@ internal record PreExpressionParseNode(IntLiteralParseNode IntLiteral, ParseNode
 internal record IdentifierExpressionParseNode(string Identifier)
     : ParseNode();
 
-internal record FunctionCallParseNode(string Function, ParseNode[] Arguments)
+internal record ArgumentListParseNode(ParseNode[] Arguments)
+    : ParseNode();
+
+internal record FunctionCallParseNode(string Function, ArgumentListParseNode ArgumentList)
     : ParseNode();
 
 internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
