@@ -2,15 +2,18 @@ namespace TFlat.Shared;
 
 public enum UnaryOperator
 {
-    Negation
+    NumericNegation
 }
 
 public enum BinaryOperator
 {
-    Addition,
-    Subtraction,
+    Exponentiation,
+
     Multiplication,
     Division,
     IntegerDivision,
-    Exponentiation,
+    Modulus,
+
+    Addition,
+    Subtraction,
 }

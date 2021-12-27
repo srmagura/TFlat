@@ -7,14 +7,12 @@ public class ExpressionParserTests : ParserTest
 {
     private static void TestParse(string code, AstNode expected)
     {
-        // TODO will change from AdditionParser to ExpressionParser in the future
-        TestParseCore(AdditionParser.Parse, ExpressionToAst.Convert, code, expected);
+        TestParseCore(ExpressionParser.Parse, ExpressionToAst.Convert, code, expected);
     }
 
     private static void TestDoesNotParse(string code)
     {
-        // TODO will change from AdditionParser to ExpressionParser in the future
-        TestDoesNotParseCore(AdditionParser.Parse, code);
+        TestDoesNotParseCore(ExpressionParser.Parse, code);
     }
 
     [TestMethod]
@@ -63,7 +61,7 @@ public class ExpressionParserTests : ParserTest
     }
 
     [TestMethod]
-    public void Negation()
+    public void NumericNegation()
     {
         var add17 = new BinaryOperationAstNode(
             BinaryOperator.Addition,
@@ -72,10 +70,63 @@ public class ExpressionParserTests : ParserTest
         );
 
         var expected = new UnaryOperationAstNode(
-            UnaryOperator.Negation,
+            UnaryOperator.NumericNegation,
             add17
         );
 
         TestParse("-(1+7)", expected);
+    }
+
+    [TestMethod]
+    public void IntegerDivisionAndExponentiation()
+    {
+        var exponent23 = new BinaryOperationAstNode(
+            BinaryOperator.Exponentiation,
+            new IntLiteralAstNode(2),
+            new IntLiteralAstNode(3)
+        );
+
+        var expected = new BinaryOperationAstNode(
+            BinaryOperator.IntegerDivision,
+            new IntLiteralAstNode(17),
+            exponent23
+        );
+
+        TestParse(@"17 \\ 2**3", expected);
+    }
+
+    [TestMethod]
+    public void ExponentationComesBeforeNumericNegation()
+    {
+        var exponent12 = new BinaryOperationAstNode(
+            BinaryOperator.Exponentiation,
+            new IntLiteralAstNode(1),
+            new IntLiteralAstNode(2)
+        );
+
+        var expected = new UnaryOperationAstNode(
+            UnaryOperator.NumericNegation,
+            exponent12
+        );
+
+        TestParse(@"-1**2", expected);
+    }
+
+    [TestMethod]
+    public void Modulus()
+    {
+        var modulus172 = new BinaryOperationAstNode(
+            BinaryOperator.Modulus,
+            new IntLiteralAstNode(17),
+            new IntLiteralAstNode(2)
+        );
+
+        var expected = new BinaryOperationAstNode(
+            BinaryOperator.Subtraction,
+            new IntLiteralAstNode(1),
+            modulus172
+        );
+
+        TestParse("1 - 17 % 2", expected);
     }
 }

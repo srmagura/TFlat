@@ -130,6 +130,7 @@ internal static class TheLexer
             '-' => new SimpleToken(TokenType.Minus, c.ToString()),
             '*' => new SimpleToken(TokenType.Asterisk, c.ToString()),
             '/' => new SimpleToken(TokenType.Slash, c.ToString()),
+            '%' => new SimpleToken(TokenType.PercentSign, c.ToString()),
             '=' => new SimpleToken(TokenType.SingleEqual, c.ToString()),
 
             _ => null

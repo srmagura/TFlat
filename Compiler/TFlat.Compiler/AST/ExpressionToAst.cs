@@ -12,10 +12,8 @@ internal static class ExpressionToAst
             StringLiteralParseNode stringLiteral => ConvertStringLiteral(stringLiteral),
             BoolLiteralParseNode boolLiteral => ConvertBoolLiteral(boolLiteral),
 
-            // UnaryOperationParseNode unaryOperation => ConvertUnaryOperation(unaryOperation),
-
-            AdditionParseNode preAddition => ConvertPreAddition(preAddition),
-            MultiplicationParseNode preMultiplication => ConvertPreMultiplication(preMultiplication),
+            UnaryOperationParseNode unaryOperation => ConvertUnaryOperation(unaryOperation),
+            BinaryOperationParseNode binaryOperation => ConvertBinaryOperation(binaryOperation),
 
             IdentifierExpressionParseNode identifierExpression => ConvertIdentifierExpression(identifierExpression),
 
@@ -32,13 +30,13 @@ internal static class ExpressionToAst
         return new FunctionCallAstNode(parseNode.Function, arguments);
     }
 
-    private static AstNode ConvertPreAddition(AdditionParseNode parseNode)
+    private static AstNode ConvertBinaryOperation(BinaryOperationParseNode parseNode)
     {
         var operand0 = Convert(parseNode.Operand);
 
-        if (parseNode.Post is PostAdditionParseNode postAddition)
+        if (parseNode.Post is PostBinaryOperationParseNode postMultiplication)
         {
-            return ConvertPostAddition(postAddition, operand0);
+            return ConvertPostBinaryOperation(postMultiplication, operand0);
         }
         else if (parseNode.Post is EmptyParseNode)
         {
@@ -46,19 +44,19 @@ internal static class ExpressionToAst
         }
         else
         {
-            var property = $"{nameof(AdditionParseNode)}.{nameof(AdditionParseNode.Post)}";
+            var property = $"{nameof(BinaryOperationParseNode)}.{nameof(BinaryOperationParseNode.Post)}";
             throw new Exception($"{property} was ${parseNode.Post.GetType().Name} which is not allowed.");
         }
     }
 
-    private static AstNode ConvertPostAddition(PostAdditionParseNode parseNode, AstNode operand0)
+    private static AstNode ConvertPostBinaryOperation(PostBinaryOperationParseNode parseNode, AstNode operand0)
     {
         var operand1 = Convert(parseNode.Operand);
         var binaryOperation = new BinaryOperationAstNode(parseNode.Operator, operand0, operand1);
 
-        if (parseNode.Post is PostAdditionParseNode postAddition)
+        if (parseNode.Post is PostBinaryOperationParseNode postMultiplication)
         {
-            return ConvertPostAddition(postAddition, binaryOperation);
+            return ConvertPostBinaryOperation(postMultiplication, binaryOperation);
         }
         else if (parseNode.Post is EmptyParseNode)
         {
@@ -66,46 +64,7 @@ internal static class ExpressionToAst
         }
         else
         {
-            var property = $"{nameof(PostAdditionParseNode)}.{nameof(PostAdditionParseNode.Post)}";
-            throw new Exception($"{property} was {parseNode.Post.GetType().Name} which is not allowed.");
-        }
-    }
-
-    private static AstNode ConvertPreMultiplication(MultiplicationParseNode parseNode)
-    {
-        var operand0 = Convert(parseNode.Operand);
-
-        if (parseNode.Post is PostMultiplicationParseNode postMultiplication)
-        {
-            return ConvertPostMultiplication(postMultiplication, operand0);
-        }
-        else if (parseNode.Post is EmptyParseNode)
-        {
-            return operand0;
-        }
-        else
-        {
-            var property = $"{nameof(MultiplicationParseNode)}.{nameof(MultiplicationParseNode.Post)}";
-            throw new Exception($"{property} was ${parseNode.Post.GetType().Name} which is not allowed.");
-        }
-    }
-
-    private static AstNode ConvertPostMultiplication(PostMultiplicationParseNode parseNode, AstNode operand0)
-    {
-        var operand1 = Convert(parseNode.Operand);
-        var binaryOperation = new BinaryOperationAstNode(parseNode.Operator, operand0, operand1);
-
-        if (parseNode.Post is PostMultiplicationParseNode postMultiplication)
-        {
-            return ConvertPostMultiplication(postMultiplication, binaryOperation);
-        }
-        else if (parseNode.Post is EmptyParseNode)
-        {
-            return binaryOperation;
-        }
-        else
-        {
-            var property = $"{nameof(PostMultiplicationParseNode)}.{nameof(PostMultiplicationParseNode.Post)}";
+            var property = $"{nameof(PostBinaryOperationParseNode)}.{nameof(PostBinaryOperationParseNode.Post)}";
             throw new Exception($"{property} was {parseNode.Post.GetType().Name} which is not allowed.");
         }
     }

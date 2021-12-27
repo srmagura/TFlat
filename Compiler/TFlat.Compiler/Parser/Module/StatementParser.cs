@@ -1,7 +1,7 @@
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser.Expression;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Module;
 
 internal static class StatementParser
 {
@@ -44,7 +44,7 @@ internal static class StatementParser
         );
     }
 
-    private static ParseResult<VariableDeclarationAndAssignmentStatementParseNode>? 
+    private static ParseResult<VariableDeclarationAndAssignmentStatementParseNode>?
         ParseVariableDeclarationAndAssignmentStatement(Token[] tokens, int position)
     {
         var i = position;
@@ -56,8 +56,8 @@ internal static class StatementParser
         if (tokens[i].Type != TokenType.SingleEqual) return null;
         i++;
 
-        var valueResult = FunctionCallParser.Parse(tokens, i);
-        if(valueResult == null) return null;
+        var valueResult = ExpressionParser.Parse(tokens, i);
+        if (valueResult == null) return null;
         i += valueResult.ConsumedTokens;
 
         if (tokens[i].Type != TokenType.Semicolon) return null;
@@ -84,7 +84,7 @@ internal static class StatementParser
         if (tokens[i].Type != TokenType.SingleEqual) return null;
         i++;
 
-        var valueResult = FunctionCallParser.Parse(tokens, i);
+        var valueResult = ExpressionParser.Parse(tokens, i);
         if (valueResult == null) return null;
         i += valueResult.ConsumedTokens;
 
@@ -132,7 +132,7 @@ internal static class StatementParser
         );
     }
 
-    private static ParseResult<FunctionCallStatementParseNode>? 
+    private static ParseResult<FunctionCallStatementParseNode>?
         ParseFunctionCallStatement(Token[] tokens, int position)
     {
         var i = position;

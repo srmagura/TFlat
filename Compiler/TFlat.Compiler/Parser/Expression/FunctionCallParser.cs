@@ -17,11 +17,12 @@ internal static class FunctionCallParser
         if (tokens[i].Type == TokenType.CloseParenthesis)
         {
             // Function call with no arguments
+            i++;
             var argumentList = new ArgumentListParseNode(Array.Empty<ParseNode>());
 
             return new ParseResult<FunctionCallParseNode>(
                 new FunctionCallParseNode(tokens[position].Value, argumentList),
-                3
+                i - position
             );
         }
 
@@ -40,8 +41,8 @@ internal static class FunctionCallParser
 
     private static ParseResult<ArgumentListParseNode>? ParseArgumentList(Token[] tokens, int position)
     {
-        // TODO support 0 or 2+ arguments
-        var arg0Result = Parse(tokens, position);
+        // TODO support 2+ arguments
+        var arg0Result = ExpressionParser.Parse(tokens, position);
         if (arg0Result == null) return null;
 
         return new ParseResult<ArgumentListParseNode>(

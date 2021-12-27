@@ -7,17 +7,12 @@ internal static class ParenthesizedExpressionParser
     internal static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
         var parenthesizedExpression = ParseParenthesized(tokens, position);
-        if(parenthesizedExpression != null) 
-            return ParseResultUtil.Generic(parenthesizedExpression);
+        if(parenthesizedExpression != null) return parenthesizedExpression;
 
-        var terminal = TerminalParser.Parse(tokens, position);
-        if (terminal != null)
-            return ParseResultUtil.Generic(terminal);
-
-        return null;
+        return UnaryOperationParser.Parse(tokens, position);
     }
 
-    private static ParseResult<AdditionParseNode>? ParseParenthesized(Token[] tokens, int position)
+    private static ParseResult<ParseNode>? ParseParenthesized(Token[] tokens, int position)
     {
         if(position >= tokens.Length) return null;
 
@@ -26,14 +21,14 @@ internal static class ParenthesizedExpressionParser
         if (tokens[i].Type != TokenType.OpenParenthesis) return null;
         i++;
 
-        var expressionResult = AdditionParser.Parse(tokens, i); // TODO will change from AdditionParser in the future
+        var expressionResult = ExpressionParser.Parse(tokens, i);
         if (expressionResult == null) return null;
         i += expressionResult.ConsumedTokens;
 
         if (tokens[i].Type != TokenType.CloseParenthesis) return null;
         i++;
 
-        return new ParseResult<AdditionParseNode>(
+        return new ParseResult<ParseNode>(
             expressionResult.Node,
             i - position
         );

@@ -38,7 +38,8 @@ internal enum TokenType
     DoubleAsterisk,
     Slash,
     DoubleBackslash,
-    SingleEqual
+    SingleEqual,
+    PercentSign
 }
 
 internal record SimpleToken(TokenType Type, string Value);

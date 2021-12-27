@@ -56,4 +56,19 @@ public class BasicTests
         var output = await CompileAndRunAsync(CodeFixtures.LetVariable);
         Assert.AreEqual("7\n3", output);
     }
+
+    [TestMethod]
+    public async Task Math()
+    {
+        var code = @"
+export fun main(): void {
+    print((-3 + 1) * 7 / 2 - 1);
+    print(17 \\ 2**3);
+    print(1 - 17 % 2);
+}
+        ";
+
+        var output = await CompileAndRunAsync(code);
+        Assert.AreEqual("-8\n2\n0", output);
+    }
 }

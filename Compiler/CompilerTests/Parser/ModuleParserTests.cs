@@ -1,9 +1,9 @@
-using CompilerTests.Parser;
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
 using TFlat.Compiler.Parser;
+using TFlat.Compiler.Parser.Module;
 
-namespace CompilerTests.AST;
+namespace CompilerTests.Parser;
 
 [TestClass]
 public class ModuleParserTests : ParserTest
@@ -11,7 +11,7 @@ public class ModuleParserTests : ParserTest
     private static AstNode ConvertToAst(ParseNode parseNode)
     {
         Assert.IsInstanceOfType(parseNode, typeof(ModuleParseNode));
-        return ModuleToAst.Convert((ModuleParseNode) parseNode);
+        return ModuleToAst.Convert((ModuleParseNode)parseNode);
     }
 
     private static void TestParse(string code, AstNode expected)
@@ -146,27 +146,5 @@ public class ModuleParserTests : ParserTest
         );
 
         TestParse(CodeFixtures.LetVariable, expected);
-    }
-
-    [TestMethod]
-    public void MathOperators()
-    {
-        var main = new FunctionDeclarationAstNode(
-            "main",
-            Exported: false,
-            Statements: new AstNode[]
-            {
-                
-            }
-        );
-
-        var expected = new ModuleAstNode(
-            new[]
-            {
-                main
-            }
-        );
-
-        TestParse(CodeFixtures.MathOperators, expected);
     }
 }

@@ -1,13 +1,13 @@
 using TFlat.Compiler.Lexer;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Module;
 
 internal class ModuleParser
 {
     internal static ModuleParseNode Parse(Token[] tokens)
     {
         var parseResult = ParseModule(tokens, 0);
-        if(parseResult == null)
+        if (parseResult == null)
             throw new Exception("Failed to parse module.");
 
         return parseResult.Node;
@@ -43,7 +43,7 @@ internal class ModuleParser
         var i = position;
 
         var exported = tokens[i].Type == TokenType.ExportKeyword;
-        if(exported) i++;
+        if (exported) i++;
 
         if (tokens[i].Type != TokenType.FunKeyword) return null;
         i++;
@@ -69,7 +69,7 @@ internal class ModuleParser
 
         var statements = new List<ParseNode>();
 
-        while(i < tokens.Length)
+        while (i < tokens.Length)
         {
             if (tokens[i].Type == TokenType.CloseCurlyBrace)
             {

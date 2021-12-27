@@ -1,6 +1,6 @@
 using TFlat.Compiler.Lexer;
 
-namespace TFlat.Compiler.Parser;
+namespace TFlat.Compiler.Parser.Module;
 
 internal static class TypeParser
 {
@@ -8,7 +8,7 @@ internal static class TypeParser
     {
         var i = position;
 
-        switch(tokens[i].Type)
+        switch (tokens[i].Type)
         {
             case TokenType.IntKeyword:
                 return new ParseResult<TypeParseNode>(

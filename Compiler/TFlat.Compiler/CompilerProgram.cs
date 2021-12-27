@@ -2,7 +2,7 @@ using CommandLine;
 using System.Text;
 using TFlat.Compiler.AST;
 using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser;
+using TFlat.Compiler.Parser.Module;
 
 namespace TFlat.Compiler;
 

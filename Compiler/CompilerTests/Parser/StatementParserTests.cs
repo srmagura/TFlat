@@ -1,5 +1,5 @@
 using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser;
+using TFlat.Compiler.Parser.Module;
 
 namespace CompilerTests.Parser;
 

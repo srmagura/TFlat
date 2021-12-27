@@ -21,9 +21,6 @@ internal record IdentifierExpressionParseNode(string Identifier)
 
 // Expressions
 
-internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
-    : ParseNode();
-
 /*
  * 
  * The production rules for operations like addition and multiplication have to be 
@@ -43,16 +40,13 @@ internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operan
  *    Expression' => + Int Expression' | empty
  */
 
-internal record PostMultiplicationParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
+internal record UnaryOperationParseNode(UnaryOperator Operator, ParseNode Operand)
     : ParseNode();
 
-internal record MultiplicationParseNode(ParseNode Operand, ParseNode Post)
+internal record PostBinaryOperationParseNode(BinaryOperator Operator, ParseNode Operand, ParseNode Post)
     : ParseNode();
 
-internal record PostAdditionParseNode(BinaryOperator Operator, MultiplicationParseNode Operand, ParseNode Post)
-    : ParseNode();
-
-internal record AdditionParseNode(MultiplicationParseNode Operand, ParseNode Post)
+internal record BinaryOperationParseNode(ParseNode Operand, ParseNode Post)
     : ParseNode();
 
 internal record ArgumentListParseNode(ParseNode[] Arguments)
