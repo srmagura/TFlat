@@ -12,7 +12,7 @@ public class SerializeAstTests : AstTest
     {
         var tokens = TheLexer.Lex(CodeFixtures.HelloWorld);
         var parseTree = ModuleParser.Parse(tokens);
-        var expectedAst = ModuleToAst.ConvertModule(parseTree);
+        var expectedAst = ModuleToAst.Convert(parseTree);
 
         using var memoryStream = new MemoryStream();
         await AstSerializer.SerializeAsync(expectedAst, memoryStream);
@@ -26,9 +26,9 @@ public class SerializeAstTests : AstTest
     [TestMethod]
     public void AstNodeTypeMapIsComplete()
     {
-        foreach (var x in Enum.GetValues<AstNodeType>())
+        foreach (var t in Enum.GetValues<AstNodeType>())
         {
-            Assert.IsInstanceOfType(AstNodeTypeMap.Map[x], typeof(Type), $"{x} is not in the map.");
+            Assert.IsInstanceOfType(AstNodeTypeMap.Map[t], typeof(Type), $"{t} is not in the map.");
         }
     }
 }

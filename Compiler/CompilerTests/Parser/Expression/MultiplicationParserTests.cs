@@ -8,7 +8,7 @@ public class MultiplicationParserTests : ParserTest
 {
     private static void TestParse(string code, AstNode expected)
     {
-        TestParseCore(MultiplicationParser.Parse, code, expected);
+        TestParseCore(MultiplicationParser.Parse, ExpressionToAst.Convert, code, expected);
     }
 
     [TestMethod]

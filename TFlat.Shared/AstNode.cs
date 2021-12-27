@@ -53,7 +53,7 @@ public record BinaryOperationAstNode(BinaryOperator Operator, AstNode Operand0, 
 
 // Statements
 
-public record VariableDeclarationStatementAstNode(string Variable, bool Const)
+public record VariableDeclarationStatementAstNode(string Identifier)
     : AstNode(AstNodeType.VariableDeclarationStatement);
 
 public record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, bool Const, AstNode Value)

@@ -7,7 +7,7 @@ public class ExpressionParserTests : ParserTest
 {
     private static void TestParse(string code, AstNode expected)
     {
-        TestParseCore(ExpressionParser.Parse, code, expected);
+        TestParseCore(ExpressionParser.Parse, ExpressionToAst.Convert, code, expected);
     }
 
     [TestMethod]

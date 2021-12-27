@@ -2,10 +2,14 @@ using TFlat.Compiler.Lexer;
 
 namespace TFlat.Compiler.Parser;
 
-internal static class LiteralParser
+internal static class TerminalParser
 {
     internal static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
+        var identifierExpression = ParseIdentifierExpression(tokens, position);
+        if(identifierExpression != null)
+            return ParseResultUtil.Generic(identifierExpression);
+
         var intLiteral = ParseIntLiteral(tokens, position);
         if (intLiteral != null)
             return ParseResultUtil.Generic(intLiteral);
@@ -58,5 +62,16 @@ internal static class LiteralParser
             TokenType.TrueKeyword => new ParseResult<BoolLiteralParseNode>(new BoolLiteralParseNode(true), 1),
             _ => null
         };
+    }
+
+    private static ParseResult<IdentifierExpressionParseNode>? ParseIdentifierExpression(Token[] tokens, int position)
+    {
+        if (tokens[position].Type != TokenType.Identifier)
+            return null;
+
+        return new ParseResult<IdentifierExpressionParseNode>(
+            new IdentifierExpressionParseNode(tokens[position].Value),
+            1
+        );
     }
 }

@@ -8,7 +8,7 @@ internal static class MultiplicationParser
     {
         var i = position;
 
-        var operand0Result = LiteralParser.Parse(tokens, i);
+        var operand0Result = TerminalParser.Parse(tokens, i);
         if (operand0Result == null) return null;
         i += operand0Result.ConsumedTokens;
 
@@ -48,7 +48,7 @@ internal static class MultiplicationParser
         if (binaryOperator == null) return null;
         i++;
 
-        var literalResult = LiteralParser.Parse(tokens, i);
+        var literalResult = TerminalParser.Parse(tokens, i);
         if (literalResult == null) return null;
         i += literalResult.ConsumedTokens;
 

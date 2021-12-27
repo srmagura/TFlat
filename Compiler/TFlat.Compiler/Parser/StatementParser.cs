@@ -7,6 +7,10 @@ internal static class StatementParser
 {
     public static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
+        var variableDeclarationStatement = ParseVariableDeclarationStatement(tokens, position);
+        if (variableDeclarationStatement != null)
+            return ParseResultUtil.Generic(variableDeclarationStatement);
+
         var variableDeclarationAndAssignmentStatement = ParseVariableDeclarationAndAssignmentStatement(tokens, position);
         if (variableDeclarationAndAssignmentStatement != null)
             return ParseResultUtil.Generic(variableDeclarationAndAssignmentStatement);
@@ -20,6 +24,24 @@ internal static class StatementParser
             return ParseResultUtil.Generic(functionCallStatement);
 
         return null;
+    }
+
+    private static ParseResult<VariableDeclarationStatementParseNode>?
+        ParseVariableDeclarationStatement(Token[] tokens, int position)
+    {
+        var i = position;
+
+        var variableDeclarationResult = ParseVariableDeclaration(tokens, i);
+        if (variableDeclarationResult == null) return null;
+        i += variableDeclarationResult.ConsumedTokens;
+
+        if (tokens[i].Type != TokenType.Semicolon) return null;
+        i++;
+
+        return new ParseResult<VariableDeclarationStatementParseNode>(
+            new VariableDeclarationStatementParseNode(variableDeclarationResult.Node),
+            i - position
+        );
     }
 
     private static ParseResult<VariableDeclarationAndAssignmentStatementParseNode>? 

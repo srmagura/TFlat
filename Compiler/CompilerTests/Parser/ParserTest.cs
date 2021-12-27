@@ -5,19 +5,24 @@ namespace CompilerTests.Parser;
 
 public abstract class ParserTest : AstTest
 {
-    internal static void TestParseCore<T>(Func<Token[], int, ParseResult<T>?> parseFunc, string code, AstNode expected)
+    internal static void TestParseCore<T>(
+        Func<Token[], int, ParseResult<T>?> parse,
+        Func<ParseNode, AstNode> convertToAst,
+        string code, 
+        AstNode expected
+    )
         where T : ParseNode
     {
         var tokens = TheLexer.Lex(code);
-        var parseResult = parseFunc(tokens, 0);
-        Assert.IsNotNull(parseResult);
+        var parseResult = parse(tokens, 0);
+        Assert.IsNotNull(parseResult, "The parse result is null.");
         Assert.AreEqual(
             tokens.Length,
             parseResult.ConsumedTokens,
-            "It did not consume the expected number of tokens."
+            "It did not consume all the tokens."
         );
 
-        var actual = ExpressionToAst.Convert(parseResult.Node);
+        var actual = convertToAst(parseResult.Node);
         AssertAstsEqual(expected, actual);
     }
 }

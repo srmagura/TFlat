@@ -6,7 +6,16 @@ internal class ModuleParser
 {
     internal static ModuleParseNode Parse(Token[] tokens)
     {
-        var i = 0;
+        var parseResult = ParseModule(tokens, 0);
+        if(parseResult == null)
+            throw new Exception("Failed to parse module.");
+
+        return parseResult.Node;
+    }
+
+    internal static ParseResult<ModuleParseNode>? ParseModule(Token[] tokens, int position)
+    {
+        var i = position;
         var functionDeclarations = new List<FunctionDeclarationParseNode>();
 
         while (i < tokens.Length)
@@ -19,10 +28,14 @@ internal class ModuleParser
                 continue;
             }
 
-            throw new Exception("Parsing failure.");
+            // Failed to parse a function but there are still tokens left
+            return null;
         }
 
-        return new ModuleParseNode(functionDeclarations.ToArray());
+        return new ParseResult<ModuleParseNode>(
+            new ModuleParseNode(functionDeclarations.ToArray()),
+            i - position
+        );
     }
 
     private static ParseResult<FunctionDeclarationParseNode>? ParseFunctionDeclaration(Token[] tokens, int position)

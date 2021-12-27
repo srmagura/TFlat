@@ -9,7 +9,7 @@ public class AdditionParserTests : ParserTest
 {
     private static void TestParse(string code, AstNode expected)
     {
-        TestParseCore(AdditionParser.Parse, code, expected);
+        TestParseCore(AdditionParser.Parse, ExpressionToAst.Convert, code, expected);
     }
 
     [TestMethod]

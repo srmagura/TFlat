@@ -5,7 +5,7 @@ internal abstract record ParseNode();
 internal record EmptyParseNode()
     : ParseNode();
 
-// Literals
+// Terminals
 
 internal record BoolLiteralParseNode(bool Value)
     : ParseNode();
@@ -14,6 +14,9 @@ internal record IntLiteralParseNode(int Value)
     : ParseNode();
 
 internal record StringLiteralParseNode(string Value) 
+    : ParseNode();
+
+internal record IdentifierExpressionParseNode(string Identifier)
     : ParseNode();
 
 // Expressions
@@ -52,9 +55,6 @@ internal record PostAdditionParseNode(BinaryOperator Operator, ParseNode Operand
 internal record PreAdditionParseNode(ParseNode Operand, ParseNode Post)
     : ParseNode();
 
-internal record IdentifierExpressionParseNode(string Identifier)
-    : ParseNode();
-
 internal record ArgumentListParseNode(ParseNode[] Arguments)
     : ParseNode();
 
@@ -75,6 +75,9 @@ internal record VariableDeclarationParseNode(string Identifier, bool Const, Type
 // Statements
 
 internal record FunctionCallStatementParseNode(FunctionCallParseNode FunctionCall)
+    : ParseNode();
+
+internal record VariableDeclarationStatementParseNode(VariableDeclarationParseNode Declaration)
     : ParseNode();
 
 internal record VariableDeclarationAndAssignmentStatementParseNode(VariableDeclarationParseNode Declaration, ParseNode Value)

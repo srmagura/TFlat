@@ -4,7 +4,7 @@ namespace TFlat.Compiler.AST;
 
 internal static class ModuleToAst
 {
-    public static ModuleAstNode ConvertModule(ModuleParseNode parseNode)
+    internal static ModuleAstNode Convert(ModuleParseNode parseNode)
     {
         var functionDeclarations = parseNode.FunctionDeclarations
             .Select(ConvertFunctionDeclaration)

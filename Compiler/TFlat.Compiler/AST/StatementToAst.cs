@@ -10,11 +10,21 @@ internal static class StatementToAst
         {
             VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignment => 
                 ConvertVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignment),
+            VariableDeclarationStatementParseNode variableDeclaration =>
+                ConvertVariableDeclarationStatement(variableDeclaration),
             AssignmentStatementParseNode assignment => ConvertAssignmentStatement(assignment),
             FunctionCallStatementParseNode functionCall => ConvertFunctionCallStatement(functionCall),
 
             _ => throw new Exception($"{parseNode.GetType().Name} is not a statement.")
         };
+    }
+
+    private static VariableDeclarationStatementAstNode
+        ConvertVariableDeclarationStatement(VariableDeclarationStatementParseNode parseNode)
+    {
+        return new VariableDeclarationStatementAstNode(
+            parseNode.Declaration.Identifier
+        );
     }
 
     private static VariableDeclarationAndAssignmentStatementAstNode 

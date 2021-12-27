@@ -60,16 +60,4 @@ internal static class ExpressionParser
             arg0Result.ConsumedTokens
         );
     }
-
-    private static ParseResult<IdentifierExpressionParseNode>? ParseIdentifierExpression(Token[] tokens, int position)
-    {
-        if (tokens[position].Type != TokenType.Identifier)
-            return null;
-
-        return new ParseResult<IdentifierExpressionParseNode>(
-            new IdentifierExpressionParseNode(tokens[position].Value),
-            1
-        );
-    }
-
 }

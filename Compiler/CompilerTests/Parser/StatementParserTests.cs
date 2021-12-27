@@ -4,154 +4,114 @@ using TFlat.Compiler.Parser;
 namespace CompilerTests.Parser;
 
 [TestClass]
-public class StatementParserTests : ParserTestOLD
+public class StatementParserTests : ParserTest
 {
-    private static void TestStatementParse(string code, ParseNode expected)
+    private static void TestParse(string code, AstNode expected)
     {
-        var tokens = TheLexer.Lex(code);
-        var result = StatementParser.Parse(tokens, 0);
-
-        Assert.IsNotNull(result);
-        AssertParseTreesEqual(expected, result.Node);
-        Assert.AreEqual(tokens.Length, result.ConsumedTokens);
+        TestParseCore(StatementParser.Parse, StatementToAst.Convert, code, expected);
     }
 
     [TestMethod]
     public void FunctionCallWithNoArguments()
     {
-        var code = @"f();";
-
-        var expected = new FunctionCallStatementParseNode(
-            new FunctionCallParseNode(
+        var expected = new FunctionCallStatementAstNode(
+            new FunctionCallAstNode(
                 "f",
-                new ArgumentListParseNode(Array.Empty<ParseNode>())
+                Array.Empty<AstNode>()
             )
         );
 
-        TestStatementParse(code, expected);
+        TestParse("f();", expected);
     }
 
     [TestMethod]
     public void PrintIntLiteral()
     {
-        var code = @"print(3);";
-
-        var expected = new FunctionCallStatementParseNode(
-            new FunctionCallParseNode(
+        var expected = new FunctionCallStatementAstNode(
+            new FunctionCallAstNode(
                 "print",
-                new ArgumentListParseNode(
-                    new[]
-                    {
-                        new IntLiteralParseNode(3)
-                    }
-                )
+                new[]
+                {
+                    new IntLiteralAstNode(3)
+                }
             )
         );
 
-        TestStatementParse(code, expected);
+        TestParse("print(3);", expected);
     }
 
     [TestMethod]
     public void PrintStringLiteral()
     {
-        var code = @"print(""hello world"");";
-
-        var expected = new FunctionCallStatementParseNode(
-            new FunctionCallParseNode(
+        var expected = new FunctionCallStatementAstNode(
+            new FunctionCallAstNode(
                 "print",
-                new ArgumentListParseNode(
-                    new[]
-                    {
-                        new StringLiteralParseNode("hello world")
-                    }
-                )
+                new[]
+                {
+                    new StringLiteralAstNode("hello world")
+                }
             )
         );
 
-        TestStatementParse(code, expected);
+        TestParse(@"print(""hello world"");", expected);
     }
 
     [TestMethod]
     public void VariableDeclaration()
     {
-        var tokens = TheLexer.Lex("const a: string");
-        var result = StatementParser.ParseVariableDeclaration(tokens, 0);
+        var expected = new VariableDeclarationStatementAstNode("a");
 
-        var expected = new VariableDeclarationParseNode(
-            "a",
-            Const: true,
-            TypeAnnotation: new TypeParseNode("string")
-        );
-
-        Assert.IsNotNull(result);
-        AssertParseTreesEqual(expected, result.Node);
-        Assert.AreEqual(tokens.Length, result.ConsumedTokens);
+        TestParse("let a: string;", expected);
     }
 
     [TestMethod]
     public void ConstVariable()
     {
-        var code = @"const a: string = ""apple"";";
-
-        var expected = new VariableDeclarationAndAssignmentStatementParseNode(
-            new VariableDeclarationParseNode(
-                "a",
-                Const: true,
-                new TypeParseNode("string")
-            ),
-            new StringLiteralParseNode("apple")
+        var expected = new VariableDeclarationAndAssignmentStatementAstNode(
+            "a",
+            Const: true,
+            new StringLiteralAstNode("apple")
         );
 
-        TestStatementParse(code, expected);
+        TestParse(@"const a: string = ""apple"";", expected);
     }
 
     [TestMethod]
-    public void LetVariable()
+    public void LetVariableWithAssignment()
     {
-        var code = @"let my_variable: int = 7;";
-
-        var expected = new VariableDeclarationAndAssignmentStatementParseNode(
-            new VariableDeclarationParseNode(
-                "my_variable",
-                Const: false,
-                new TypeParseNode("int")
-            ),
-            new IntLiteralParseNode(7)
+        var expected = new VariableDeclarationAndAssignmentStatementAstNode(
+            "my_variable",
+            Const: false,
+            new IntLiteralAstNode(7)
         );
 
-        TestStatementParse(code, expected);
+        TestParse("let my_variable: int = 7;", expected);
     }
 
     [TestMethod]
     public void Assignment()
     {
-        var code = @"my_variable = 3;";
-
-        var expected = new AssignmentStatementParseNode(
+        var expected = new AssignmentStatementAstNode(
             "my_variable",
-            new IntLiteralParseNode(3)
+            new IntLiteralAstNode(3)
         );
 
-        TestStatementParse(code, expected);
+        TestParse("my_variable = 3;", expected);
     }
 
     [TestMethod]
     public void PrintVariable()
     {
-        var code = @"print(a);";
-
-        var expected = new FunctionCallStatementParseNode(
-            new FunctionCallParseNode(
+        var expected = new FunctionCallStatementAstNode(
+            new FunctionCallAstNode(
                 "print",
-                new ArgumentListParseNode(
-                    new[]
-                    {
-                        new IdentifierExpressionParseNode("a")
-                    }
-                )
+                new[]
+                {
+                    new VariableReferenceAstNode("a")
+                }
             )
         );
 
-        TestStatementParse(code, expected);
+        TestParse("print(a);", expected);
     }
 }
