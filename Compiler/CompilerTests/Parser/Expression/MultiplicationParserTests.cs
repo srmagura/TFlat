@@ -14,7 +14,7 @@ public class MultiplicationParserTests : ParserTest
     [TestMethod]
     public void IntLiteral()
     {
-        TestParse("2", new IntLiteralAstNode(2));
+        TestParse("2", new IntAstNode(2));
     }
 
     [TestMethod]
@@ -22,8 +22,8 @@ public class MultiplicationParserTests : ParserTest
     {
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Multiplication,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         TestParse("1*2", expected);
@@ -34,8 +34,8 @@ public class MultiplicationParserTests : ParserTest
     {
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Division,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         TestParse("1/2", expected);
@@ -46,8 +46,8 @@ public class MultiplicationParserTests : ParserTest
     {
         var expected = new BinaryOperationAstNode(
             BinaryOperator.IntegerDivision,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         TestParse(@"1\\2", expected);
@@ -58,14 +58,14 @@ public class MultiplicationParserTests : ParserTest
     {
         var multiply12 = new BinaryOperationAstNode(
             BinaryOperator.Multiplication,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Multiplication,
             multiply12,
-            new IntLiteralAstNode(3)
+            new IntAstNode(3)
         );
 
         TestParse("1*2*3", expected);
@@ -76,20 +76,20 @@ public class MultiplicationParserTests : ParserTest
     {
         var multiply12 = new BinaryOperationAstNode(
             BinaryOperator.Multiplication,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         var divideBy3 = new BinaryOperationAstNode(
             BinaryOperator.Division,
             multiply12,
-            new IntLiteralAstNode(3)
+            new IntAstNode(3)
         );
 
         var expected = new BinaryOperationAstNode(
             BinaryOperator.IntegerDivision,
             divideBy3,
-            new IntLiteralAstNode(4)
+            new IntAstNode(4)
         );
 
         TestParse(@"1*2/3\\4", expected);

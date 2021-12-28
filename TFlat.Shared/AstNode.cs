@@ -3,9 +3,9 @@ namespace TFlat.Shared;
 public enum AstNodeType
 {
     // Literals
-    BoolLiteral,
-    IntLiteral,
-    StringLiteral,
+    Bool,
+    Int,
+    String,
 
     // Expressions
     VariableReference,
@@ -28,14 +28,14 @@ public abstract record AstNode(AstNodeType Type);
 
 // Literals
 
-public record BoolLiteralAstNode(bool Value)
-    : AstNode(AstNodeType.BoolLiteral);
+public record BoolAstNode(bool Value)
+    : AstNode(AstNodeType.Bool);
 
-public record IntLiteralAstNode(int Value)
-    : AstNode(AstNodeType.IntLiteral);
+public record IntAstNode(int Value)
+    : AstNode(AstNodeType.Int);
 
-public record StringLiteralAstNode(string Value)
-    : AstNode(AstNodeType.StringLiteral);
+public record StringAstNode(string Value)
+    : AstNode(AstNodeType.String);
 
 // Expressions
 
@@ -78,9 +78,9 @@ public static class AstNodeTypeMap
     public static readonly Dictionary<AstNodeType, Type> Map = new()
     {
         // Literals
-        [AstNodeType.BoolLiteral] = typeof(BoolLiteralAstNode),
-        [AstNodeType.IntLiteral] = typeof(IntLiteralAstNode),
-        [AstNodeType.StringLiteral] = typeof(StringLiteralAstNode),
+        [AstNodeType.Bool] = typeof(BoolAstNode),
+        [AstNodeType.Int] = typeof(IntAstNode),
+        [AstNodeType.String] = typeof(StringAstNode),
         
         // Expressions
         [AstNodeType.VariableReference] = typeof(VariableReferenceAstNode),

@@ -24,10 +24,10 @@ public class ExpressionParserTests : ParserTest
     [TestMethod]
     public void Literals()
     {
-        TestParse("2", new IntLiteralAstNode(2));
-        TestParse("\"foo\"", new StringLiteralAstNode("foo"));
-        TestParse("false", new BoolLiteralAstNode(false));
-        TestParse("true", new BoolLiteralAstNode(true));
+        TestParse("2", new IntAstNode(2));
+        TestParse("\"foo\"", new StringAstNode("foo"));
+        TestParse("false", new BoolAstNode(false));
+        TestParse("true", new BoolAstNode(true));
     }
 
     [TestMethod]
@@ -35,13 +35,13 @@ public class ExpressionParserTests : ParserTest
     {
         var divide23 = new BinaryOperationAstNode(
             BinaryOperator.Division,
-            new IntLiteralAstNode(2),
-            new IntLiteralAstNode(3)
+            new IntAstNode(2),
+            new IntAstNode(3)
         );
 
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Addition,
-            new IntLiteralAstNode(1),
+            new IntAstNode(1),
             divide23
         );
 
@@ -53,8 +53,8 @@ public class ExpressionParserTests : ParserTest
     {
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Addition,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(7)
+            new IntAstNode(1),
+            new IntAstNode(7)
         );
 
         TestParse("((1 + (7)))", expected);
@@ -63,18 +63,18 @@ public class ExpressionParserTests : ParserTest
     [TestMethod]
     public void NumericNegation()
     {
-        var add17 = new BinaryOperationAstNode(
-            BinaryOperator.Addition,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(7)
-        );
-
-        var expected = new UnaryOperationAstNode(
+        var negate3 = new UnaryOperationAstNode(
             UnaryOperator.NumericNegation,
-            add17
+            new IntAstNode(3)
         );
 
-        TestParse("-(1+7)", expected);
+        var expected = new BinaryOperationAstNode(
+            BinaryOperator.Addition,
+            negate3,
+            new IntAstNode(1)
+        );
+
+        TestParse("-3+1", expected);
     }
 
     [TestMethod]
@@ -82,13 +82,13 @@ public class ExpressionParserTests : ParserTest
     {
         var exponent23 = new BinaryOperationAstNode(
             BinaryOperator.Exponentiation,
-            new IntLiteralAstNode(2),
-            new IntLiteralAstNode(3)
+            new IntAstNode(2),
+            new IntAstNode(3)
         );
 
         var expected = new BinaryOperationAstNode(
             BinaryOperator.IntegerDivision,
-            new IntLiteralAstNode(17),
+            new IntAstNode(17),
             exponent23
         );
 
@@ -100,8 +100,8 @@ public class ExpressionParserTests : ParserTest
     {
         var exponent12 = new BinaryOperationAstNode(
             BinaryOperator.Exponentiation,
-            new IntLiteralAstNode(1),
-            new IntLiteralAstNode(2)
+            new IntAstNode(1),
+            new IntAstNode(2)
         );
 
         var expected = new UnaryOperationAstNode(
@@ -117,13 +117,13 @@ public class ExpressionParserTests : ParserTest
     {
         var modulus172 = new BinaryOperationAstNode(
             BinaryOperator.Modulus,
-            new IntLiteralAstNode(17),
-            new IntLiteralAstNode(2)
+            new IntAstNode(17),
+            new IntAstNode(2)
         );
 
         var expected = new BinaryOperationAstNode(
             BinaryOperator.Subtraction,
-            new IntLiteralAstNode(1),
+            new IntAstNode(1),
             modulus172
         );
 

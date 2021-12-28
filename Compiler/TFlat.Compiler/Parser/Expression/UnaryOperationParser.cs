@@ -28,7 +28,7 @@ internal static class UnaryOperationParser
         if (unaryOperator == null) return null;
         i++;
 
-        var expressionResult = ExpressionParser.Parse(tokens, i); 
+        var expressionResult = ParenthesizedExpressionParser.Parse(tokens, i); 
         if (expressionResult == null) return null;
         i += expressionResult.ConsumedTokens;
 

@@ -37,7 +37,7 @@ public class ModuleParserTests : ParserTest
             Exported: false,
             new[]
             {
-                Print(new StringLiteralAstNode("hello world"))
+                Print(new StringAstNode("hello world"))
             }
         );
 
@@ -59,7 +59,7 @@ public class ModuleParserTests : ParserTest
             Exported: false,
             Statements: new[]
             {
-                Print(new IntLiteralAstNode(3))
+                Print(new IntAstNode(3))
             }
         );
 
@@ -74,7 +74,7 @@ public class ModuleParserTests : ParserTest
                         Array.Empty<AstNode>()
                     )
                 ),
-                Print(new StringLiteralAstNode(".14159"))
+                Print(new StringAstNode(".14159"))
             }
         );
 
@@ -100,7 +100,7 @@ public class ModuleParserTests : ParserTest
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "a",
                     Const: true,
-                    new StringLiteralAstNode("apple")
+                    new StringAstNode("apple")
                 ),
                 Print(new VariableReferenceAstNode("a"))
             }
@@ -127,12 +127,12 @@ public class ModuleParserTests : ParserTest
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "my_variable",
                     Const: false,
-                    new IntLiteralAstNode(7)
+                    new IntAstNode(7)
                 ),
                 Print(new VariableReferenceAstNode("my_variable")),
                 new AssignmentStatementAstNode(
                     "my_variable",
-                    new IntLiteralAstNode(3)
+                    new IntAstNode(3)
                 ),
                 Print(new VariableReferenceAstNode("my_variable")),
             }

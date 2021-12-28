@@ -32,7 +32,7 @@ public class StatementParserTests : ParserTest
                 "print",
                 new[]
                 {
-                    new IntLiteralAstNode(3)
+                    new IntAstNode(3)
                 }
             )
         );
@@ -48,7 +48,7 @@ public class StatementParserTests : ParserTest
                 "print",
                 new[]
                 {
-                    new StringLiteralAstNode("hello world")
+                    new StringAstNode("hello world")
                 }
             )
         );
@@ -70,7 +70,7 @@ public class StatementParserTests : ParserTest
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "a",
             Const: true,
-            new StringLiteralAstNode("apple")
+            new StringAstNode("apple")
         );
 
         TestParse(@"const a: string = ""apple"";", expected);
@@ -82,7 +82,7 @@ public class StatementParserTests : ParserTest
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "my_variable",
             Const: false,
-            new IntLiteralAstNode(7)
+            new IntAstNode(7)
         );
 
         TestParse("let my_variable: int = 7;", expected);
@@ -93,7 +93,7 @@ public class StatementParserTests : ParserTest
     {
         var expected = new AssignmentStatementAstNode(
             "my_variable",
-            new IntLiteralAstNode(3)
+            new IntAstNode(3)
         );
 
         TestParse("my_variable = 3;", expected);

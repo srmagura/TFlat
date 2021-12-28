@@ -69,19 +69,19 @@ internal static class ExpressionToAst
         }
     }
 
-    private static IntLiteralAstNode ConvertIntLiteral(IntLiteralParseNode parseNode)
+    private static IntAstNode ConvertIntLiteral(IntLiteralParseNode parseNode)
     {
-        return new IntLiteralAstNode(parseNode.Value);
+        return new IntAstNode(parseNode.Value);
     }
 
-    private static StringLiteralAstNode ConvertStringLiteral(StringLiteralParseNode parseNode)
+    private static StringAstNode ConvertStringLiteral(StringLiteralParseNode parseNode)
     {
-        return new StringLiteralAstNode(parseNode.Value);
+        return new StringAstNode(parseNode.Value);
     }
 
-    private static BoolLiteralAstNode ConvertBoolLiteral(BoolLiteralParseNode parseNode)
+    private static BoolAstNode ConvertBoolLiteral(BoolLiteralParseNode parseNode)
     {
-        return new BoolLiteralAstNode(parseNode.Value);
+        return new BoolAstNode(parseNode.Value);
     }
 
     private static VariableReferenceAstNode ConvertIdentifierExpression(IdentifierExpressionParseNode parseNode)
